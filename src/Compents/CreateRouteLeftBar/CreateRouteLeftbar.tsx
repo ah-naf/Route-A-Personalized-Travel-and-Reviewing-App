@@ -5,7 +5,7 @@ import { LuLogOut } from "react-icons/lu";
 
 function CreateRouteTopbar() {
   return (
-    <div className=" flex flex-col justify-between items-center p-4 shadow-lg h-screen max-w-[50px] bg-white text-gray-600">
+    <div className=" flex flex-col justify-between items-center p-4 shadow-lg h-screen max-w-[50px] bg-white text-gray-600 border">
       <div className="flex flex-col items-center gap-2">
         <Avatar
           size="md"

@@ -1,24 +1,44 @@
 import { useCallback } from "react";
-import ReactFlow, { addEdge, useEdgesState, useNodesState } from "reactflow";
+import ReactFlow, {
+  ConnectionMode,
+  Edge,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
 import CreateRouteLeftbar from "../Compents/CreateRouteLeftBar/CreateRouteLeftbar";
-import StartNode from "../Compents/StartNode/StartNode";
 import CreateRouteTopbar from "../Compents/CreateRouteTopbar/CreateRouteTopbar";
+import EdgeWithPlusIcon from "../Compents/EdgeWithPlusIcon/EdgeWithPlusIcon";
+import StartNode from "../Compents/StartNode/StartNode";
 
 const initialNodes = [
   {
     id: "1",
-    position: { x: 100, y: 0 },
+    position: {
+      x: window.innerWidth / 2 - 50,
+      y: window.innerHeight / 2 - 200,
+    },
     data: { label: "start" },
     type: "startNode",
   },
-  { id: "2", position: { x: 0, y: 100 }, data: { label: "2" } },
+  {
+    id: "2",
+    position: { x: window.innerWidth / 2 - 50, y: window.innerHeight / 2 },
+    data: { label: "2" },
+  },
 ];
 
 const nodeTypes = {
   startNode: StartNode,
 };
 
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+const initialEdges: Edge[] = [
+  { id: "e1-2", source: "1", target: "2", type: "edgeWithPlusIcon" },
+];
+
+const edgesType = {
+  edgeWithPlusIcon: EdgeWithPlusIcon,
+};
 
 export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -37,10 +57,14 @@ export default function App() {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          snapToGrid={true}
+          edgeTypes={edgesType}
+          nodeTypes={nodeTypes}
+          connectionMode={ConnectionMode.Loose}
+          fitView
         />
       </div>
     </div>
