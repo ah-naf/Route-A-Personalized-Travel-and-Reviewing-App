@@ -5,6 +5,7 @@ import ReactFlow, {
   BackgroundVariant,
   ConnectionMode,
   Edge,
+  MarkerType,
   ReactFlowProvider,
   addEdge,
   useEdgesState,
@@ -13,7 +14,8 @@ import ReactFlow, {
 import CreateRouteLeftbar from "../Compents/CreateRouteLeftBar/CreateRouteLeftbar";
 import CreateRouteTopbar from "../Compents/CreateRouteTopbar/CreateRouteTopbar";
 import EdgeWithPlusIcon from "../Compents/EdgeWithPlusIcon/EdgeWithPlusIcon";
-import StartNode from "../Compents/StartNode/StartNode";
+import StartNode from "../Nodes/StartNode/StartNode";
+import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { VehicleType, vehicles } from "../util";
 
 const initialNodes = [
@@ -35,6 +37,7 @@ const initialNodes = [
 
 const nodeTypes = {
   startNode: StartNode,
+  vehicleNode: VehicleNode,
 };
 
 const initialEdges: Edge[] = [
@@ -55,7 +58,20 @@ export default function App() {
   const [reactFlowInstance, setReactFlowInstance] = useState(null) as any;
 
   const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
+    (params) =>
+      setEdges((eds) => {
+        const temp = {
+          ...params,
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            width: 15,
+            height: 15,
+            color: "#000",
+          },
+          style: { strokeWidth: 2, stroke: "#000" },
+        };
+        return addEdge(temp, eds);
+      }),
     [setEdges]
   );
 
@@ -72,7 +88,7 @@ export default function App() {
         const reactFlowBounds =
           reactFlowWrapper.current.getBoundingClientRect();
         let type = event.dataTransfer.getData("application/reactflow");
-        console.log({ type });
+
         // check if the dropped element is valid
         if (typeof type === "undefined" || !type) {
           return;
@@ -82,7 +98,7 @@ export default function App() {
           x: event.clientX - reactFlowBounds.left,
           y: event.clientY - reactFlowBounds.top,
         });
-        type = JSON.parse(type)
+        type = JSON.parse(type);
         const newNode = {
           id: getId(),
           type: type.type,
@@ -117,7 +133,6 @@ export default function App() {
               edgeTypes={edgesType}
               nodeTypes={nodeTypes}
               connectionMode={ConnectionMode.Loose}
-              fitView
             >
               <Background
                 color="grey"
@@ -145,11 +160,10 @@ const Sidebar = () => {
       JSON.stringify(tempNodeType)
     );
     event.dataTransfer.effectAllowed = "move";
-    // console.log(event)
   };
 
   return (
-    <aside className="absolute text-black top-1/2 bg-white shadow rounded-lg -translate-y-1/2 left-4 z-20 border border-gray-100 max-w-md">
+    <aside className="absolute text-black top-4 bg-white shadow rounded-lg left-4 z-20 border border-gray-100 max-w-sm ">
       <div className="border-b border-gray-300">
         <div className="p-4">
           <p className=" text-3xl font-primary font-semibold tracking-wider">
@@ -160,7 +174,7 @@ const Sidebar = () => {
           </p>
         </div>
       </div>
-      <div className="px-4 pb-4 max-h-96 overflow-auto">
+      <div className="px-2 pb-4 max-h-96 overflow-auto">
         <Collapse.Group divider={false} splitted>
           <Collapse
             title={
@@ -173,14 +187,14 @@ const Sidebar = () => {
               {vehicles.map((val: VehicleType, ind: number) => (
                 <div
                   key={ind}
-                  className="w-[100px] flex flex-col border p-2 px-3 items-center justify-center rounded-md shadow z-100"
+                  className="w-[80px] flex flex-col border p-2 px-3 items-center justify-center rounded-md shadow z-100"
                   onDragStart={(event) =>
-                    onDragStart(event, { ...val, type: "vehicle" })
+                    onDragStart(event, { ...val, type: "vehicleNode" })
                   }
                   draggable
                 >
                   <img src={val.image} alt="" className=" object-center" />
-                  <p className="font-secondary tracking-wider text-gray-500 font-medium">
+                  <p className="font-secondary tracking-wider text-gray-500 font-medium text-sm text-center">
                     {val.name}
                   </p>
                 </div>
@@ -201,7 +215,7 @@ const Sidebar = () => {
                 className="border w-20 h-20 grid place-content-center shadow font-medium text-gray-700 rounded-md"
                 onDragStart={(event) =>
                   onDragStart(event, {
-                    type: "other",
+                    type: "otherNode",
                     name: "New Node",
                     image: "",
                   })
@@ -214,27 +228,6 @@ const Sidebar = () => {
           </Collapse>
         </Collapse.Group>
       </div>
-      {/* <div
-        className="dndnode input"
-        onDragStart={(event) => onDragStart(event, "input")}
-        draggable
-      >
-        Input Node
-      </div>
-      <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, "default")}
-        draggable
-      >
-        Default Node
-      </div>
-      <div
-        className="dndnode output"
-        onDragStart={(event) => onDragStart(event, "output")}
-        draggable
-      >
-        Output Node
-      </div> */}
     </aside>
   );
 };

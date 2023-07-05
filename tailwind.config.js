@@ -8,5 +8,5 @@ export default {
       secondary: ["Ubuntu", "sans-serif"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

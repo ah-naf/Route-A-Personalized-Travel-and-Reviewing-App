@@ -28,13 +28,13 @@ const EdgeWithPlusIcon = ({
     targetPosition,
   });
   const edge = useEdges();
-  const nn = useNodes()
+  const nn = useNodes();
   const rr = useReactFlow();
   const [label, setLabel] = useState("");
 
   useEffect(() => {
     const temp = edge.filter((val) => val.id === id)[0];
-    console.log(nn)
+
     if (temp && temp.label) {
       setLabel(temp.label as string);
     }
@@ -42,15 +42,14 @@ const EdgeWithPlusIcon = ({
 
   const onEdgeClick = (e, id) => {
     e.stopPropagation();
-    const edges = rr.getEdges().map((val) => {
-      if (val.id === id) {
-        return { ...val, label: "LOL" };
-      }
-      return val;
-    });
-    
-    console.log(temp)
-    rr.setEdges(edges);
+    // const edges = rr.getEdges().map((val) => {
+    //   if (val.id === id) {
+    //     return { ...val, label: "LOL" };
+    //   }
+    //   return val;
+    // });
+
+    // rr.setEdges(edges);
   };
 
   return (
@@ -67,7 +66,7 @@ const EdgeWithPlusIcon = ({
           }}
           className=""
         >
-          {label ? (
+          {!label ? (
             <button
               className="bg-emerald-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow hover:bg-emerald-600"
               onClick={(event) => onEdgeClick(event, id)}
@@ -88,4 +87,4 @@ const EdgeWithPlusIcon = ({
   );
 };
 
-export default EdgeWithPlusIcon
+export default EdgeWithPlusIcon;
