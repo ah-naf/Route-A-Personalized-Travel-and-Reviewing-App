@@ -21,6 +21,7 @@ import UpdateNode from "../Nodes/UpdateNode/UpdateNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { RootState } from "../store";
 import RouteNode from "../Nodes/RouteNode/RouteNode";
+import EndNode from "../Nodes/EndNode/EndNode";
 
 const initialNodes = [
   {
@@ -37,7 +38,8 @@ const initialNodes = [
 const nodeTypes = {
   startNode: StartNode,
   vehicleNode: VehicleNode,
-  routeNode: RouteNode
+  routeNode: RouteNode,
+  endNode: EndNode
 };
 
 const initialEdges: Edge[] = [];

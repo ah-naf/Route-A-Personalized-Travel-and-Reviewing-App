@@ -1,50 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-function ReactQuillEditor({ height = "500px" }) {
-  const [value, setValue] = useState(
-    '<h1><span class="ql-size-large">Name</span></h1><p>ahnaf Hasan Shifat</p><ol><li>lol</li></ol>'
-  );
+function ReactQuillEditor({ placeholder = "" }) {
+  const [value, setValue] = useState("");
   const quillRef = useRef<ReactQuill | null>(null);
-
-  useEffect(() => {
-    if (quillRef.current) {
-      const quill = quillRef.current.getEditor();
-      const tempQuill = quill.getModule("toolbar");
-      quill.keyboard.addBinding(
-        {
-          key: "M",
-          shortKey: true,
-        },
-        () => {
-          const imageButton = tempQuill.container.querySelector(".ql-image");
-          imageButton.click();
-        }
-      );
-    }
-  }, []);
 
   const modules = {
     toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike"],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ font: [] }],
       ["blockquote"],
-      [{ header: 1 }, { header: 2 }],
       [{ list: "ordered" }, { list: "bullet" }],
       [{ indent: "-1" }, { indent: "+1" }],
       [{ direction: "rtl" }],
-      [{ size: ["small", false, "large", "huge"] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       [{ color: [] }, { background: [] }],
       [{ align: [] }],
       ["clean"],
       ["link", "image"],
-      [{ font: [] }],
     ],
-    
   };
-
-  
 
   return (
     <div>
@@ -54,6 +31,7 @@ function ReactQuillEditor({ height = "500px" }) {
         onChange={setValue}
         modules={modules}
         ref={quillRef}
+        placeholder={placeholder}
         // style={{ height }}
       />
     </div>
@@ -61,3 +39,22 @@ function ReactQuillEditor({ height = "500px" }) {
 }
 
 export default ReactQuillEditor;
+
+// Keyboard Command
+
+// useEffect(() => {
+//   if (quillRef.current) {
+//     const quill = quillRef.current.getEditor();
+//     const tempQuill = quill.getModule("toolbar");
+//     quill.keyboard.addBinding(
+//       {
+//         key: "M",
+//         shortKey: true,
+//       },
+//       () => {
+//         const imageButton = tempQuill.container.querySelector(".ql-image");
+//         imageButton.click();
+//       }
+//     );
+//   }
+// }, []);

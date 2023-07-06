@@ -3,13 +3,13 @@ import { VehicleType, vehicles } from "../../util";
 
 function SideToolBox() {
   const onDragStart = (event, nodeType) => {
-    let tempNodeType = {}
+    let tempNodeType = {};
     // if (nodeType.type === "vehicleNode") {
-      tempNodeType = {
-        label: nodeType.name,
-        image: nodeType.image,
-        type: nodeType.type,
-      };
+    tempNodeType = {
+      label: nodeType.name,
+      image: nodeType.image,
+      type: nodeType.type,
+    };
     // }
     event.dataTransfer.setData(
       "application/reactflow",
@@ -39,7 +39,7 @@ function SideToolBox() {
               </p>
             }
           >
-            <div className="grid grid-cols-3 gap-3 max-w-sm ">
+            <div className="grid grid-cols-3 gap-2  ">
               {vehicles.map((val: VehicleType, ind: number) => (
                 <div
                   key={ind}
@@ -66,7 +66,7 @@ function SideToolBox() {
               </p>
             }
           >
-            <div className="flex items-center">
+            <div className="grid grid-cols-3 gap-2">
               <div
                 className="border w-20 h-20 grid place-content-center shadow font-medium text-gray-700 rounded-md"
                 onDragStart={(event) =>
@@ -79,6 +79,32 @@ function SideToolBox() {
                 draggable
               >
                 Route <br /> Node
+              </div>
+              <div
+                className="border w-20 h-20 grid place-content-center shadow font-medium text-gray-700 rounded-md"
+                onDragStart={(event) =>
+                  onDragStart(event, {
+                    type: "startNode",
+                    name: "Start Node",
+                    image: "",
+                  })
+                }
+                draggable
+              >
+                Start <br /> Node
+              </div>
+              <div  
+                className="border w-20 h-20 grid place-content-center shadow font-medium text-gray-700 rounded-md"
+                onDragStart={(event) =>
+                  onDragStart(event, {
+                    type: "endNode",
+                    name: "End Node",
+                    image: "",
+                  })
+                }
+                draggable
+              >
+                End <br /> Node
               </div>
             </div>
           </Collapse>
