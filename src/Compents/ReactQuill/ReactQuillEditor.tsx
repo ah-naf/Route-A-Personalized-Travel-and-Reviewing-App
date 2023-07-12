@@ -1,10 +1,18 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-function ReactQuillEditor({ placeholder = "" }) {
+function ReactQuillEditor({ placeholder = "", onValueChange, defaultValue }) {
   const [value, setValue] = useState("");
   const quillRef = useRef<ReactQuill | null>(null);
+
+  useEffect(() => {
+    onValueChange(value);
+  }, [value]);
+
+  useEffect(() => {
+    if(defaultValue) setValue(defaultValue)
+  }, [])
 
   const modules = {
     toolbar: [

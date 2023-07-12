@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const MultipleSelect = ({ onValueChange }) => {
+const MultipleSelect = ({ onValueChange, defaultValue }) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedItems(defaultValue);
+  }, []);
 
   const handleItemDelete = (name: string) => {
     const updatedItems = selectedItems.filter(
@@ -16,15 +20,16 @@ const MultipleSelect = ({ onValueChange }) => {
     let temp = JSON.parse(JSON.stringify(selectedItems));
     if (e.key === "Enter") {
       temp = [...selectedItems, inputValue];
-      setInputValue('')
+      setInputValue("");
+      setSelectedItems(temp);
+      onValueChange(temp);
     }
     if (e.key === "Backspace" && !inputValue) {
-      temp = temp.slice(0, -1)
-      setInputValue('')
+      temp = temp.slice(0, -1);
+      setInputValue("");
+      setSelectedItems(temp);
+      onValueChange(temp);
     }
-    setSelectedItems(temp)
-    onValueChange(temp)
-    
   };
 
   return (
@@ -38,7 +43,7 @@ const MultipleSelect = ({ onValueChange }) => {
               <button
                 key={name}
                 onClick={() => handleItemDelete(name)}
-                className="px-2 flex items-center text-md text-white bg-black rounded"
+                className="px-2 py-1 flex items-center text-md text-white bg-black rounded"
               >
                 {name} <span className="ml-1">×</span>
               </button>

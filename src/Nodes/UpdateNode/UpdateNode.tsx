@@ -2,6 +2,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import UpdateRouteNode from "./Update/UpdateRouteNode";
 import UpdateVehicleNode from "./Update/UpdateVehicleNode";
+import ViewRouteNode from "../ViewNode/ViewRouteNode";
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -12,12 +13,22 @@ function UpdateNode() {
   );
 
   return (
-    <div>
-      {selectedNode && selectedNode.type === "vehicleNode" && (
-        <UpdateVehicleNode />
+    <>
+      {selectedNode && selectedNode.editMode ? (
+        <div>
+          {/* Edit Mode Enabled */}
+
+          {selectedNode.type === "vehicleNode" && <UpdateVehicleNode />}
+          {selectedNode.type === "routeNode" && <UpdateRouteNode />}
+        </div>
+      ) : (
+        <div>
+          {/* Read Only View Mode */}
+
+          {selectedNode.type === 'routeNode' && <ViewRouteNode />}
+        </div>
       )}
-      {selectedNode && selectedNode.type === "routeNode" && <UpdateRouteNode />}
-    </div>
+    </>
   );
 }
 

@@ -3,15 +3,14 @@ import { Handle, Node, Position, useReactFlow } from "reactflow";
 import { setSelectedNode } from "../../slices/CustomNodeSlice";
 
 function VehicleNode({ id, data }) {
-  
   const rflow = useReactFlow();
   const dispatch = useDispatch();
 
   const handleDoubleClick = () => {
     const { type } = rflow.getNode(id) as Node;
     // const tempData = { ...data, cost: "", time: "" };
-    
-    dispatch(setSelectedNode({ id, data, type }));
+
+    dispatch(setSelectedNode({ id, data, type, editMode: true }));
   };
 
   return (
@@ -47,7 +46,10 @@ function VehicleNode({ id, data }) {
           )}
           {data.time && (
             <p className="text-sm leading-[9px] font-medium tracking-wider">
-              Time: <span className="font-light">{data.time} {data.time_unit}</span>
+              Time:{" "}
+              <span className="font-light">
+                {data.time} {data.time_unit}
+              </span>
             </p>
           )}
         </div>

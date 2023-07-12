@@ -3,6 +3,35 @@ export interface VehicleType {
   image: string;
 }
 
+export interface VehicleNodeData {
+  label: string;
+  image: string;
+  cost: number;
+  time: number;
+  time_unit: string;
+}
+
+export interface RouteNodeData {
+  place: string;
+  tag: string[];
+  image: string;
+  desc: string;
+  tourist_spot: boolean;
+  tourist_spot_desc: string;
+}
+
+export interface CustomNodeSliceStateType {
+  selectedNode:
+    | {
+        id: string;
+        data: VehicleNodeData | RouteNodeData;
+        type: string;
+        editMode: boolean;
+      }
+    | Record<string, never>;
+  lastUpdated: string;
+}
+
 export const vehicles = [
   { name: "Bus", image: "/Vehicle/bus.png" },
   { name: "Car", image: "/Vehicle/car.png" },

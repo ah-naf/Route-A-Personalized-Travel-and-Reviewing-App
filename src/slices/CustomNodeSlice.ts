@@ -1,23 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { CustomNodeSliceStateType } from "../util";
 
-interface initialStateType {
-  selectedNode:
-    | {
-        id: string;
-        data: {
-          label: string;
-          image: string;
-          cost: number;
-          time: number;
-          time_unit: string;
-        };
-        type: string;
-      }
-    | Record<string, never>;
-  lastUpdated: string;
-}
-
-const initialState: initialStateType = {
+const initialState: CustomNodeSliceStateType = {
   selectedNode: {},
   lastUpdated: "",
 };
@@ -29,9 +13,9 @@ export const CustomNodeSlice = createSlice({
     setSelectedNode: (state, { payload }) => {
       state.selectedNode = payload;
     },
-    setLastUpdatedTime: (state, {payload}) => {
-      state.lastUpdated = payload
-    }
+    setLastUpdatedTime: (state, { payload }) => {
+      state.lastUpdated = payload;
+    },
   },
 });
 
