@@ -51,44 +51,53 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="flex p-4 mt-4 bg-white rounded shadow-lg gap-4 justify-between">
-          <button className="bg-orange-400 px-6 min-w-max mr-4 rounded-md text-white text-lg font-primary font-bold tracking-wider">
-            Find Route
-          </button>
-
-          <div className="flex items-center w-full pt-3 pb-1">
-            <p className="p-3 text-gray-700 border rounded border-gray-300">
-              <FaPlaneDeparture size={25} />
-            </p>
-            <div className="text-left ml-3 font-secondary">
-              <Input
-                rounded
-                bordered
-                color="warning"
-                labelPlaceholder="Source"
-                helperText="Source Place. (Ex: Chittagong)"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center w-full pt-3 pb-1">
-            <p className="p-3 text-gray-700 border rounded border-gray-300">
-              <BiGlobeAlt size={25} />
-            </p>
-            <div className="text-left ml-3 font-secondary">
-              <Input
-                rounded
-                bordered
-                color="warning"
-                labelPlaceholder="Destination"
-                helperText="Destination Place. (Ex: Cox's Bazar)"
-              />
-            </div>
-          </div>
-        </div>
+        <SeachContainer />
       </div>
     </div>
   );
 }
 
 export default HomePage;
+
+export const SeachContainer = ({ page }) => {
+  return (
+    <div
+      className={`flex p-4 ${
+        page === "search" ? "mt-0 " : "mt-4"
+      } bg-white rounded shadow-[0_6px_15px_10px_rgba(0,0,0,0.05)] gap-4 justify-between`}
+    >
+      <div className="flex items-center w-full pt-3 pb-1">
+        <p className="p-3 text-gray-700 border rounded border-gray-300">
+          <FaPlaneDeparture size={25} />
+        </p>
+        <div className="text-left ml-3 font-secondary">
+          <Input
+            rounded
+            bordered
+            color="warning"
+            labelPlaceholder="Source"
+            helperText="Source Place. (Ex: Chittagong)"
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center w-full pt-3 pb-1">
+        <p className="p-3 text-gray-700 border rounded border-gray-300">
+          <BiGlobeAlt size={25} />
+        </p>
+        <div className="text-left ml-3 font-secondary">
+          <Input
+            rounded
+            bordered
+            color="warning"
+            labelPlaceholder="Destination"
+            helperText="Destination Place. (Ex: Cox's Bazar)"
+          />
+        </div>
+      </div>
+      <button className="bg-orange-400 px-6 min-w-max ml-4 rounded-md text-white text-lg font-primary font-bold tracking-wider">
+        Find Route
+      </button>
+    </div>
+  );
+};
