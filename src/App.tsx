@@ -5,6 +5,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import SearchPage from "./Pages/SearchPage";
 import TempPage from "./Pages/TempPage";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

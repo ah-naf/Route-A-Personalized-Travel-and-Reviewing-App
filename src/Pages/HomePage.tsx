@@ -59,7 +59,11 @@ function HomePage() {
 
 export default HomePage;
 
-export const SeachContainer = ({ page }) => {
+interface SearchContainerProps {
+  page?: string;
+}
+
+export const SeachContainer = ({ page }: SearchContainerProps) => {
   return (
     <div
       className={`flex p-4 ${

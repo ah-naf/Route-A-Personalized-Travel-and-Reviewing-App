@@ -17,3 +17,7 @@
 .ql-toolbar {
   z-index: 100000;
 }
+
+.ant-segmented-item.ant-segmented-item-selected {
+  border: 1px solid !important;
+}
