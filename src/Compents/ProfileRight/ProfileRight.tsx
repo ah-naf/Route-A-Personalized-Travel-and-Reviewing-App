@@ -16,7 +16,7 @@ function ProfileRight() {
         >
           <Segmented
             block
-            options={["User Routes", "Activity", "Friends"]}
+            options={["User Routes", "Activity", "Settings"]}
             value={option}
             onChange={(e) => setOption(e as string)}
             size="large"

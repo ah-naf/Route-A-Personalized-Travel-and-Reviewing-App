@@ -49,21 +49,7 @@ function ProfileLeft() {
               </span>{" "}
               <span>Joined March 2023</span>{" "}
             </p>
-            <div className="flex items-center justify-center gap-4 my-4">
-              <button className="flex items-center gap-3 shadow border-2 px-2 py-1 rounded font-medium hover:border-gray-500 active:scale-[95%] transition-all">
-                <span>
-                  <BsPersonAdd size={25} />
-                  {/* <BsPersonDown />{" "} */}
-                </span>
-                Follow
-              </button>
-              <button className="flex items-center gap-3 shadow border-2 px-2 py-1 rounded font-medium hover:border-red-500 hover:text-red-500 active:scale-[95%] transition-all">
-                <span>
-                  <MdOutlineReportGmailerrorred size={25} />
-                </span>
-                Report
-              </button>
-            </div>
+            
             <p className="px-2 mt-4 font-primary text-sm tracking-wide leading-6">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aut
               officia eos similique laboriosam aliquid quaerat. Eligendi labore
@@ -76,7 +62,7 @@ function ProfileLeft() {
           <h1 className="text-2xl font-medium mb-3">Information</h1>
           <div className="grid gap-2">
             <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text-xl tracking-wide gap-2">
+              <span className="flex items-center font-primary text- tracking-wide gap-2">
                 <CgWebsite />
                 Website
               </span>
@@ -85,7 +71,7 @@ function ProfileLeft() {
               </span>
             </p>
             <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text-xl  gap-2">
+              <span className="flex items-center font-primary text-  gap-2">
                 <HiOutlineMail />
                 E-mail
               </span>
@@ -94,7 +80,7 @@ function ProfileLeft() {
               </span>
             </p>
             <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text-xl gap-2">
+              <span className="flex items-center font-primary text- gap-2">
                 <BsTelephone />
                 Phone
               </span>
@@ -103,7 +89,7 @@ function ProfileLeft() {
               </span>
             </p>
             <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text-xl gap-2">
+              <span className="flex items-center font-primary text- gap-2">
                 <AiOutlineCalendar />
                 Joined
               </span>

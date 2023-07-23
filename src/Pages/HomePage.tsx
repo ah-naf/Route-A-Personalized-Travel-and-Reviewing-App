@@ -1,6 +1,7 @@
 import { Input } from "@nextui-org/react";
 import { BiGlobeAlt } from "react-icons/bi";
 import { FaPlaneDeparture } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Navbar from "../Compents/Navbar/Navbar";
 
 function HomePage() {
@@ -100,7 +101,9 @@ export const SeachContainer = ({ page }: SearchContainerProps) => {
         </div>
       </div>
       <button className="bg-orange-400 px-6 min-w-max ml-4 rounded-md text-white text-lg font-primary font-bold tracking-wider">
-        Find Route
+        <Link to={"/search"} className="w-full h-full">
+          Find Route
+        </Link>
       </button>
     </div>
   );
