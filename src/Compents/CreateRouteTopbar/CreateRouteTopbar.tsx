@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useEdges, useNodes, useReactFlow } from "reactflow";
 import { setLastUpdatedTime } from "../../slices/CustomNodeSlice";
 import { RootState } from "../../store";
 
@@ -24,14 +25,17 @@ function CreateRouteTopbar({ reactFlowInstance }) {
   const lastUpdated = useSelector(
     (state: RootState) => state.customNode.lastUpdated
   );
+  const node = useNodes();
+  const edge = useEdges();
+  const rflow = useReactFlow();
 
   useEffect(() => {
     const tempFlow = localStorage.getItem("current_flow");
     if (tempFlow) {
       const flow = JSON.parse(tempFlow);
-      if(flow && Object.keys(flow).length > 0) {
-        const time = flow.lastUpdated
-        dispatch(setLastUpdatedTime(time))
+      if (flow && Object.keys(flow).length > 0) {
+        const time = flow.lastUpdated;
+        dispatch(setLastUpdatedTime(time));
       }
     }
   }, [dispatch]);
@@ -59,6 +63,81 @@ function CreateRouteTopbar({ reactFlowInstance }) {
     }
   }, [reactFlowInstance, dispatch]);
 
+
+  // Calculate Minimum time/cost
+  const handleClick = () => {
+    const adjacencyList = new Map();
+    let edgePathMap; // To store the edge path and its corresponding cost.
+    let maxVal = Infinity;
+    const addNode = (nd: string) => adjacencyList.set(nd, []);
+    const edgeAdd = (origin: string, dest: string, edgeId: string) => {
+      adjacencyList.get(origin).push({ dest, edgeId });
+    };
+
+    const dfs = (
+      start: string,
+      type: string,
+      visited = new Set(),
+      cost = 0,
+      path: string[] = []
+    ) => {
+      if (rflow.getNode(start)?.type === "endNode") {
+        if (cost < maxVal) {
+          maxVal = cost;
+          edgePathMap = path;
+        }
+        return;
+      }
+
+      visited.add(start);
+
+      const destList = adjacencyList.get(start);
+      for (const { dest, edgeId } of destList) {
+        if (!visited.has(dest)) {
+          let num = 0;
+          const curNode = rflow.getNode(dest);
+          if (curNode?.type === "vehicleNode") {
+            if (type === "cost") {
+              num += curNode?.data.cost;
+            } else {
+              if (curNode.data.time_unit === "days") {
+                num = curNode.data.time * 24 * 60;
+              } else if (curNode.data.time_unit === "hours") {
+                num = curNode.data.time * 60;
+              } else num = curNode.data.time;
+            }
+          }
+
+          dfs(dest, type, visited, cost + num, [...path, edgeId]);
+        }
+      }
+
+      visited.delete(start);
+    };
+
+    node.forEach((val) => addNode(val.id));
+    edge.forEach((val) => edgeAdd(val.source, val.target, val.id));
+
+    const start = node.find((val) => val.type === "startNode")?.id;
+    if (start) {
+      dfs(start, "time");
+      console.log("Minimum Cost Path:", maxVal, edgePathMap);
+      const edgeSet = new Set(edgePathMap);
+      const temp = rflow.getEdges().map((e) => {
+        if (edgeSet.has(e.id)) {
+          return {
+            ...e,
+            style: { strokeWidth: 5, stroke: "orange" },
+
+            animated: true,
+          };
+        }
+        return e;
+      });
+      rflow.setEdges(temp);
+    }
+  };
+
   return (
     <div className="absolute top-0 w-full z-[100] flex items-center justify-between p-3 px-4 bg-white border-l-2 shadow">
       <div>
@@ -85,7 +164,10 @@ function CreateRouteTopbar({ reactFlowInstance }) {
         >
           Save as draft
         </button>
-        <button className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white">
+        <button
+          className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white"
+          onClick={handleClick}
+        >
           Publish
         </button>
       </div>

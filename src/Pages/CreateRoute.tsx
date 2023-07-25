@@ -6,26 +6,26 @@ import ReactFlow, {
   ConnectionMode,
   Controls,
   Edge,
-  MarkerType,
   ReactFlowProvider,
   addEdge,
   useEdgesState,
   useNodesState,
   useReactFlow,
 } from "reactflow";
+import { v4 as uuidv4 } from "uuid";
 import CreateRouteLeftbar from "../Compents/CreateRouteLeftBar/CreateRouteLeftbar";
 import CreateRouteTopbar from "../Compents/CreateRouteTopbar/CreateRouteTopbar";
 import SideToolBox from "../Compents/SideToolBox/SideToolBox";
+import EndNode from "../Nodes/EndNode/EndNode";
+import RouteNode from "../Nodes/RouteNode/RouteNode";
 import StartNode from "../Nodes/StartNode/StartNode";
 import UpdateNode from "../Nodes/UpdateNode/UpdateNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { RootState } from "../store";
-import RouteNode from "../Nodes/RouteNode/RouteNode";
-import EndNode from "../Nodes/EndNode/EndNode";
 
 const initialNodes = [
   {
-    id: "1",
+    id: uuidv4(),
     position: {
       x: window.innerWidth / 2 - 50,
       y: window.innerHeight / 2 - 200,
@@ -39,13 +39,12 @@ const nodeTypes = {
   startNode: StartNode,
   vehicleNode: VehicleNode,
   routeNode: RouteNode,
-  endNode: EndNode
+  endNode: EndNode,
 };
 
 const initialEdges: Edge[] = [];
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => uuidv4();
 
 const MyFlow = () => {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -58,20 +57,17 @@ const MyFlow = () => {
   const { setViewport } = useReactFlow();
 
   const onConnect = useCallback(
-    (params) =>
+    (params) => {
+      console.log(params);
       setEdges((eds) => {
         const temp = {
           ...params,
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 15,
-            height: 15,
-            color: "#000",
-          },
-          style: { strokeWidth: 2, stroke: "#000" },
+
+          style: { strokeWidth: 1, stroke: "#000" },
         };
         return addEdge(temp, eds);
-      }),
+      });
+    },
     [setEdges]
   );
 
@@ -83,7 +79,6 @@ const MyFlow = () => {
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
-      //   if(!reactFlowWrapper || !reactFlowWrapper.current) return;
       if (reactFlowWrapper && reactFlowWrapper.current) {
         const reactFlowBounds =
           reactFlowWrapper.current.getBoundingClientRect();
