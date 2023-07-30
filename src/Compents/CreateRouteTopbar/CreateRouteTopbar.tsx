@@ -19,7 +19,7 @@ const MONTH = [
   "Dec",
 ];
 
-function CreateRouteTopbar({ reactFlowInstance }) {
+function CreateRouteTopbar({ reactFlowInstance, type = "edit" }) {
   const [title, setTitle] = useState("untitled");
   const dispatch = useDispatch();
   const lastUpdated = useSelector(
@@ -63,9 +63,8 @@ function CreateRouteTopbar({ reactFlowInstance }) {
     }
   }, [reactFlowInstance, dispatch]);
 
-
   // Calculate Minimum time/cost
-  const handleClick = () => {
+  const handleRouteOption = (evt) => {
     const adjacencyList = new Map();
     let edgePathMap; // To store the edge path and its corresponding cost.
     let maxVal = Infinity;
@@ -119,10 +118,11 @@ function CreateRouteTopbar({ reactFlowInstance }) {
     edge.forEach((val) => edgeAdd(val.source, val.target, val.id));
 
     const start = node.find((val) => val.type === "startNode")?.id;
+
     if (start) {
-      dfs(start, "time");
-      console.log("Minimum Cost Path:", maxVal, edgePathMap);
+      if (evt.target.value !== "default") dfs(start, evt.target.value);
       const edgeSet = new Set(edgePathMap);
+
       const temp = rflow.getEdges().map((e) => {
         if (edgeSet.has(e.id)) {
           return {
@@ -132,7 +132,11 @@ function CreateRouteTopbar({ reactFlowInstance }) {
             animated: true,
           };
         }
-        return e;
+        return {
+          ...e,
+          style: { strokeWidth: 1, stroke: "#000" },
+          animated: false,
+        };
       });
       rflow.setEdges(temp);
     }
@@ -146,31 +150,58 @@ function CreateRouteTopbar({ reactFlowInstance }) {
           className="font-primary font-bold tracking-wider text-xl border-none outline-none"
           placeholder="Enter title"
           value={title}
+          disabled={type === "show"}
           onChange={(e) => setTitle(e.target.value)}
         />
         <p className="font-secondary text-xs mt-2 text-gray-400">
           {lastUpdated && (
-            <span className="mr-2">Last saved {lastUpdated}</span>
+            <span className="mr-2">
+              Last {type === "show" ? "updated" : "saved"} {lastUpdated}
+            </span>
           )}
-          <span className="bg-orange-200 text-orange-800 font-[500] py-1 px-2 rounded">
-            In progress
+          <span
+            className={`${
+              type === "show"
+                ? "bg-green-300 text-green-800"
+                : "bg-orange-200 text-orange-800"
+            } font-[500] py-1 px-2 rounded`}
+          >
+            {type === "show" ? "Published" : "In progress"}
           </span>
         </p>
       </div>
-      <div className="flex items-center gap-2 font-secondary text-[1rem]">
-        <button
-          className="p-1 px-3 border-2 rounded-md text-gray-800 border-gray-300 hover:text-black"
-          onClick={onSave}
-        >
-          Save as draft
-        </button>
-        <button
-          className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white"
-          onClick={handleClick}
-        >
-          Publish
-        </button>
-      </div>
+      {type !== "show" ? (
+        <div className="flex items-center gap-2 font-secondary text-[1rem]">
+          <button
+            className="p-1 px-3 border-2 rounded-md text-gray-800 border-gray-300 hover:text-black"
+            onClick={onSave}
+          >
+            Save as draft
+          </button>
+          <button
+            className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white"
+            // onClick={handleClick}
+          >
+            Publish
+          </button>
+        </div>
+      ) : (
+        <div>
+          <label htmlFor="route_option" className="mr-1 font-medium">
+            Route Options:{" "}
+          </label>
+          <select
+            name="route_option"
+            className="p-2 rounded bg-transparent border-2 border-gray-700"
+            id="route_option"
+            onChange={handleRouteOption}
+          >
+            <option value="default">Default</option>
+            <option value="cost">Minimum Cost</option>
+            <option value="time">Minimum Time</option>
+          </select>
+        </div>
+      )}
     </div>
   );
 }

@@ -14,7 +14,7 @@ function ViewRouteNode() {
   const selectedNode = useTypedSelector(
     (state) => state.customNode.selectedNode
   );
-
+  console.log(selectedNode);
   const [modal_visible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [data, setData] = useState({
@@ -62,13 +62,13 @@ function ViewRouteNode() {
               <BiHelpCircle />
             </button>
           </div>
-          <p dangerouslySetInnerHTML={{ __html: data.desc }} />
+          {data.desc ? <p dangerouslySetInnerHTML={{ __html: data.desc }} /> : <h1 className="text-center text-2xl font-medium mt-12">No Description Found.</h1>}
         </div>
       </Modal.Body>
       <Modal.Footer>
-        {data.tag.length > 0 && (
+        {data.tag && data.tag.length > 0 && (
           <div className="flex gap-2 font-primary items-start w-full border-t-2 pt-4 border-[rgba(0,0,0,0.2)]">
-            <h3 className="tracking-wider font-semibold text-lg">Tags :</h3>
+            <h3 className="tracking-wider font-semibold text-lg w-16">Tags :</h3>
             <div className="grid grid-cols-8 gap-2">
               {data.tag.map((val, ind) => (
                 <button

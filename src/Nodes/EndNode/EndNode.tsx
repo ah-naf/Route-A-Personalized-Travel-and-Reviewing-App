@@ -10,7 +10,7 @@ function EndNode() {
       />
       <div className="w-full h-full p-1 py-2 text-center">
         <img
-          src="end.gif"
+          src="/end.gif"
           className="w-[70%] object-contain object-center mx-auto"
           alt=""
         />

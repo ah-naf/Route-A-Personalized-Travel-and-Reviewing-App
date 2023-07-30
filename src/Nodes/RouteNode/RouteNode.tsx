@@ -11,11 +11,12 @@ interface MousePos {
 }
 
 function RouteNode({ id, data }) {
-  let image = "traveler.gif";
+  
+  let image = "/traveler.gif";
   const dataAche = Object.keys(data).length === 6;
-  if (dataAche) {
+  if (dataAche || data.place) {
     if (data.image) image = data.image;
-    else image = "waypoint.gif";
+    else image = "/waypoint.gif";
   }
   const rflow = useReactFlow();
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function RouteNode({ id, data }) {
 
   const handleClick = (mode: string) => {
     const { type } = rflow.getNode(id) as Node;
+    
     dispatch(setSelectedNode({ id, data, type, editMode: mode === "edit" }));
     setContextMenu(null);
   };
@@ -77,7 +79,7 @@ function RouteNode({ id, data }) {
                 } object-contain mx-auto`}
                 alt=""
               />
-              {!dataAche ? (
+              {!dataAche && !data.place ? (
                 <p className="text-xs font-primary tracking-wider font-medium text-center">
                   Double click to edit the node.
                 </p>

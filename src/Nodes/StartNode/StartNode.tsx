@@ -10,7 +10,7 @@ function StartNode() {
       />
       <div className="w-full h-full p-1 flex items-center text-center relative">
         <img
-          src="start.gif"
+          src="/start.gif"
           className="w-[80%] object-contain object-center mx-auto"
           alt=""
         />
