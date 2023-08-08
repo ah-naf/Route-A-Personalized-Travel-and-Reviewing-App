@@ -1,8 +1,11 @@
+import { Badge } from "@nextui-org/react";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BiHelpCircle } from "react-icons/bi";
+import { BsBookmarkHeart } from "react-icons/bs";
 import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import UserNavbarMenu from "../UserNavbarMenu/UserNavbarMenu";
+import Bookmarks from "../Bookmarks/Bookmarks";
 
 function CreateRouteTopbar() {
   return (
@@ -21,6 +24,7 @@ function CreateRouteTopbar() {
           className="hover:text-black cursor-pointer"
           title="Help"
         />
+        <Bookmarks />
       </div>
       <div className="flex flex-col justify-center items-center gap-4 pb-2">
         <Link to={"/profile?tab=setting"}>
