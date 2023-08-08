@@ -21,6 +21,7 @@ import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import ViewRouteNode from "../Nodes/ViewNode/ViewRouteNode";
 import { RootState } from "../store";
 import UserReview from "../Compents/UserReview/UserReview";
+import Suggestions from "../Compents/Suggestions/Suggestions";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -80,6 +81,7 @@ const MyFlow = () => {
         />
         <Controls />
         <UserReview />
+        <Suggestions />
         {Object.keys(selectedNode).length > 0 && <ViewRouteNode />}
       </ReactFlow>
     </div>

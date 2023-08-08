@@ -1,3 +1,4 @@
+import { UploadFile } from "antd";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -25,6 +26,8 @@ export interface RouteNodeData {
   desc: string;
   tourist_spot: boolean;
   tourist_spot_desc: string;
+  tourist_spot_title: string;
+  tourist_spot_images: UploadFile[] | null;
 }
 
 export interface CustomNodeSliceStateType {

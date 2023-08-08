@@ -1,8 +1,10 @@
 import { Checkbox, Modal } from "@nextui-org/react";
+import { UploadFile } from "antd";
 import { useEffect, useState } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import { useReactFlow } from "reactflow";
+import ImageUpload from "../../../Compents/ImageUpload/ImageUpload";
 import MultipleSelect from "../../../Compents/MultipleSelect/MultipleSelect";
 import ReactQuillEditor from "../../../Compents/ReactQuill/ReactQuillEditor";
 import { setSelectedNode } from "../../../slices/CustomNodeSlice";
@@ -19,13 +21,15 @@ function UpdateRouteNode() {
 
   const [modal_visible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
-  const [data, setData] = useState({
+  const [data, setData] = useState<RouteNodeData>({
     place: "",
     tag: [""],
     image: "",
     desc: "",
     tourist_spot: false,
     tourist_spot_desc: "",
+    tourist_spot_title: "",
+    tourist_spot_images: [],
   });
 
   useEffect(() => {
@@ -163,15 +167,40 @@ function UpdateRouteNode() {
               It is a tourist spot
             </Checkbox>
             {data.tourist_spot && (
-              <div>
-                <p className="tracking-wide mb-2">Tourist spot description</p>
-                <ReactQuillEditor
-                  placeholder="Write something informational about this tourist spot"
-                  defaultValue={data.tourist_spot}
-                  onValueChange={(e: string) =>
-                    setData({ ...data, tourist_spot_desc: e })
-                  }
-                />
+              <div className="space-y-4">
+                <div>
+                  <p className="tracking-wide mb-1">Tourist spot title</p>
+                  <input
+                    type="text"
+                    placeholder="Cox's Bazar - The Longest Sea Beach"
+                    className="border-2 p-2 rounded outline-none border-gray-300 focus:border-gray-700 w-full"
+                    // value={data.image}
+                    // onChange={(e) =>
+                    //   setData({ ...data, image: e.target.value })
+                    // }
+                  />
+                </div>
+                <div>
+                  <p className="tracking-wide mb-2">Tourist spot description</p>
+                  <ReactQuillEditor
+                    placeholder="Write something informational about this tourist spot"
+                    defaultValue={data.tourist_spot}
+                    onValueChange={(e: string) =>
+                      setData({ ...data, tourist_spot_desc: e })
+                    }
+                  />
+                </div>
+                <div>
+                  <p className="tracking-wide mb-2">Images</p>
+                  <div className="w-full">
+                    <ImageUpload
+                      setImages={(e: UploadFile[]) =>
+                        setData({ ...data, tourist_spot_images: e })
+                      }
+                      defaultValue={data.tourist_spot_images}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
