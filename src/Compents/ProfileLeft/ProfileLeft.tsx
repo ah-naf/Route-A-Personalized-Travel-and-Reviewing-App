@@ -1,39 +1,35 @@
-import { BigHead } from "@bigheads/core";
+import { ColorPicker, theme } from "antd";
+import { useState } from "react";
 import { AiOutlineCalendar } from "react-icons/ai";
 import { BsTelephone } from "react-icons/bs";
 import { CgWebsite } from "react-icons/cg";
+import { GrMagic } from "react-icons/gr";
 import { HiOutlineMail } from "react-icons/hi";
+import ProfileLeftAvatar from "../ProfileLeftAvatar/ProfileLeftAvatar";
 
 function ProfileLeft() {
+  const { token } = theme.useToken();
+  const [bgColor, setBgColor] = useState<string>(token.colorPrimary);
+  console.log(bgColor);
   return (
     <div className="basis-1/3">
       <div className="grid grid-cols-1 gap-4">
         <div className="bg-white p-2 rounded-lg pt-3 shadow">
-          <div className="bg-black h-36 rounded-lg relative">
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 shadow-lg w-24 h-24 bg-white rounded-full pb-4 px-1 flex items-center">
-              <BigHead
-                accessory="shades"
-                body="chest"
-                circleColor="blue"
-                clothing="tankTop"
-                clothingColor="white"
-                eyebrows="concerned"
-                eyes="squint"
-                faceMask={false}
-                faceMaskColor="red"
-                facialHair="stubble"
-                graphic="gatsby"
-                hair="bob"
-                hairColor="orange"
-                hat="none3"
-                hatColor="blue"
-                lashes={false}
-                lipColor="purple"
-                mask
-                mouth="grin"
-                skinTone="red"
-              />
-            </div>
+          <div
+            className={`h-36 rounded-lg relative`}
+            style={{ backgroundColor: bgColor }}
+          >
+            <span className="absolute bg-white p-1 -translate-x-1 -translate-y-1 shadow-lg rounded-full bottom-0 right-0 cursor-pointer">
+              <ColorPicker
+                value={bgColor}
+                onChange={(e) =>
+                  setBgColor(typeof e === "string" ? e : e.toHexString())
+                }
+              >
+                <GrMagic size="15" />
+              </ColorPicker>
+            </span>
+            <ProfileLeftAvatar />
           </div>
           <div className="text-center pt-16 px-4">
             <p className="font-primary tracking-wider font-medium text-gray-600">

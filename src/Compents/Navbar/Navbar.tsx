@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import CreateRouteDialog from "../CreateRouteDialog/CreateRouteDialog";
 import UserNavbarMenu from "../UserNavbarMenu/UserNavbarMenu";
+import Bookmarks from "../Bookmarks/Bookmarks";
 
 function Navbar() {
   const user = true;
@@ -30,6 +31,7 @@ function Navbar() {
             </button>
           </>
         )}
+        <Bookmarks />
       </div>
     </div>
   );
