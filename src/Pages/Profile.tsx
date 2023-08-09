@@ -7,7 +7,7 @@ function Profile() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <div className="bg-[whitesmoke] flex-grow pt-8">
-        <div className="flex gap-8 max-w-6xl mx-auto ">
+        <div className="flex gap-8 max-w-6xl mx-auto max-h-[680px]">
           <ProfileLeft />
           <ProfileRight />
         </div>
