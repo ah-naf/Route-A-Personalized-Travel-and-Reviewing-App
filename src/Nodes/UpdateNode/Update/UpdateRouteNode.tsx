@@ -180,7 +180,7 @@ function UpdateRouteNode() {
                     // }
                   />
                 </div>
-                <div>
+                <div className="grid">
                   <p className="tracking-wide mb-2">Tourist spot description</p>
                   <ReactQuillEditor
                     placeholder="Write something informational about this tourist spot"

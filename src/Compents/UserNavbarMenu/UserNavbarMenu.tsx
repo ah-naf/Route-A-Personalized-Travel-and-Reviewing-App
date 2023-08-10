@@ -1,5 +1,6 @@
 import { BigHead } from "@bigheads/core";
-import { LogOut, Settings2, User } from "lucide-react";
+import { LogOut, PlusSquare, Settings2, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Link } from "react-router-dom";
 
 function UserNavbarMenu() {
   return (
@@ -44,11 +44,15 @@ function UserNavbarMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <User className="mr-2 h-4 w-4" />
-          <Link to={'/profile'}>Profile</Link>
+          <Link to={"/profile"}>Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Settings2 className="mr-2 h-4 w-4" />
-          <Link to={'/profile?tab=setting'}>Setting</Link>
+          <Link to={"/profile?tab=setting"}>Setting</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <PlusSquare className="mr-2 h-4 w-4" />
+          <Link to='/place/new'>Add place</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LogOut className="mr-2 h-4 w-4" />

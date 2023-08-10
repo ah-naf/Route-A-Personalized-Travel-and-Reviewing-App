@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 
-function ReactQuillEditor({ placeholder = "", onValueChange, defaultValue }) {
+function ReactQuillEditor({
+  placeholder = "",
+  onValueChange,
+  defaultValue,
+  theme = "snow",
+  height = "100px",
+}) {
   const [value, setValue] = useState("");
   const quillRef = useRef<ReactQuill | null>(null);
 
@@ -11,8 +18,8 @@ function ReactQuillEditor({ placeholder = "", onValueChange, defaultValue }) {
   }, [value]);
 
   useEffect(() => {
-    if(defaultValue) setValue(defaultValue)
-  }, [])
+    if (defaultValue) setValue(defaultValue);
+  }, []);
 
   const modules = {
     toolbar: [
@@ -32,37 +39,18 @@ function ReactQuillEditor({ placeholder = "", onValueChange, defaultValue }) {
   };
 
   return (
-    <div>
+    <div className="min-w-full mb-16">
       <ReactQuill
-        theme="snow"
+        theme={theme}
         value={value}
         onChange={setValue}
         modules={modules}
         ref={quillRef}
         placeholder={placeholder}
-        // style={{ height }}
+        className={`min-h-[${height}] h-full`}
       />
     </div>
   );
 }
 
 export default ReactQuillEditor;
-
-// Keyboard Command
-
-// useEffect(() => {
-//   if (quillRef.current) {
-//     const quill = quillRef.current.getEditor();
-//     const tempQuill = quill.getModule("toolbar");
-//     quill.keyboard.addBinding(
-//       {
-//         key: "M",
-//         shortKey: true,
-//       },
-//       () => {
-//         const imageButton = tempQuill.container.querySelector(".ql-image");
-//         imageButton.click();
-//       }
-//     );
-//   }
-// }, []);

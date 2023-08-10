@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
+import Bookmarks from "../Bookmarks/Bookmarks";
 import CreateRouteDialog from "../CreateRouteDialog/CreateRouteDialog";
 import UserNavbarMenu from "../UserNavbarMenu/UserNavbarMenu";
-import Bookmarks from "../Bookmarks/Bookmarks";
 
 function Navbar() {
   const user = true;
@@ -14,7 +14,9 @@ function Navbar() {
         </h1>
       </Link>
       <div className="flex items-center gap-4 text-sm">
-        <button className="hover:underline">Discover</button>
+        <button className="hover:underline">
+          <Link to={"/discover"}>Discover</Link>
+        </button>
         <button className="hover:underline">Explore</button>
         {user ? (
           <>

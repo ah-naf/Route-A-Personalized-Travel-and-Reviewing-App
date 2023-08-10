@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import CreateRoute from "./Pages/CreateRoute";
+import Discover from "./Pages/Discover";
 import HomePage from "./Pages/HomePage";
 import Login from "./Pages/Login";
 import Profile from "./Pages/Profile";
@@ -7,6 +8,7 @@ import Register from "./Pages/Register";
 import SearchPage from "./Pages/SearchPage";
 import ShowRoute from "./Pages/ShowRoute";
 import TempPage from "./Pages/TempPage";
+import AddNewPlace from "./Pages/AddNewPlace";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/route/:id" element={<ShowRoute />} />
+      <Route path="/discover" element={<Discover />} />
+      <Route path="/place/new" element={<AddNewPlace />} />
     </Routes>
   );
 }
