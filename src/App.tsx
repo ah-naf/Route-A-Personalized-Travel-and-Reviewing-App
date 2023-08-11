@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import AddNewPlace from "./Pages/AddNewPlace";
 import CreateRoute from "./Pages/CreateRoute";
 import Discover from "./Pages/Discover";
 import HomePage from "./Pages/HomePage";
@@ -8,7 +9,7 @@ import Register from "./Pages/Register";
 import SearchPage from "./Pages/SearchPage";
 import ShowRoute from "./Pages/ShowRoute";
 import TempPage from "./Pages/TempPage";
-import AddNewPlace from "./Pages/AddNewPlace";
+import Place from "./Pages/Place";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/route/:id" element={<ShowRoute />} />
       <Route path="/discover" element={<Discover />} />
       <Route path="/place/new" element={<AddNewPlace />} />
+      <Route path="/place/:id" element={<Place />} />
     </Routes>
   );
 }
