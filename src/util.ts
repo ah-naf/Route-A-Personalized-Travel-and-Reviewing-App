@@ -30,6 +30,7 @@ export interface RouteNodeData {
   tourist_spot_images: UploadFile[] | null;
 }
 
+// Custom Node Slice Initial State Type
 export interface CustomNodeSliceStateType {
   selectedNode:
     | {
@@ -40,6 +41,27 @@ export interface CustomNodeSliceStateType {
       }
     | Record<string, never>;
   lastUpdated: string;
+}
+
+export type UserType = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatar: BigHeadPropsType;
+  bio ?: string
+  url ?: string
+  phone ?: string
+  createdAt: string
+};
+
+// Auth Slice Initial State Type
+export interface AuthSliceStateType {
+  user: UserType | null | undefined;
+  profileUser: UserType | null | undefined;
+  token: string | null | undefined;
+  msg: string | null | undefined;
+  status: "success" | "loading" | "failed" | "idle";
 }
 
 export const vehicles = [

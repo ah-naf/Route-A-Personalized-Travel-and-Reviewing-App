@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import CustomNodeSlice from './slices/CustomNodeSlice'
+import AuthSlice from './slices/AuthSlice'
 
 export const store = configureStore({
   reducer: {
-    customNode: CustomNodeSlice
+    customNode: CustomNodeSlice,
+    auth: AuthSlice
   },
 })
 

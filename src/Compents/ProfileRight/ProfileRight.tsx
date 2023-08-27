@@ -1,11 +1,32 @@
 import { ConfigProvider, Segmented } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { RootState } from "../../store";
 import UserActivity from "../UserActivity/UserActivity";
 import UserRoutes from "../UserRoutes/UserRoutes";
 import UserSetting from "../UserSetting/UserSetting";
 
 function ProfileRight() {
   const [option, setOption] = useState("User Routes");
+  const auth = useSelector((state: RootState) => state.auth);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search).get("tab");
+  const [options, setOptions] = useState([
+    "User Routes",
+    "Activity",
+    "Settings",
+  ]);
+
+  useEffect(() => {
+    if (queryParams === "setting") setOption("Settings");
+    if (
+      auth.user?.id &&
+      auth.profileUser?.id &&
+      auth.user?.id != auth.profileUser?.id
+    )
+      setOptions(options.filter((val) => val !== "Settings"));
+  }, [queryParams, auth.profileUser?.id, auth.user?.id]);
 
   return (
     <div className="bg-white rounded-lg basis-2/3 overflow-y-auto relative flex flex-col shadow">
@@ -20,7 +41,7 @@ function ProfileRight() {
           >
             <Segmented
               block
-              options={["User Routes", "Activity", "Settings"]}
+              options={options}
               value={option}
               onChange={(e) => setOption(e as string)}
               size="large"
