@@ -1,5 +1,6 @@
 import { Eye, Plus, Trash } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,13 @@ const PUBLISHED = [
 ];
 
 function CreateRouteDialog() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const id = "route_" + uuidv4();
+    navigate(`/create/${id}`);
+  };
+
   return (
     <Dialog>
       <DialogTrigger>
@@ -52,12 +60,13 @@ function CreateRouteDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
-          <Link to={"/create"}>
-            <button className="flex items-center border-2 p-2 rounded-md mx-auto font-medium text-sm hover:border-orange-500 hover:bg-orange-500 hover:text-white transition">
-              <Plus className="w-4 h-4 mr-2" />
-              <span>Create New Route</span>
-            </button>
-          </Link>
+          <button
+            className="flex items-center border-2 p-2 rounded-md mx-auto font-medium text-sm hover:border-orange-500 hover:bg-orange-500 hover:text-white transition"
+            onClick={handleClick}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            <span>Create New Route</span>
+          </button>
           <div>
             <h3 className="text-sm font-medium">Drafts ({DRAFT.length})</h3>
             <div className="mt-3 space-y-1">

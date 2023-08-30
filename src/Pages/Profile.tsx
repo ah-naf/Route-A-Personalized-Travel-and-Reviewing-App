@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import Navbar from "../Compents/Navbar/Navbar";
@@ -11,10 +11,6 @@ function Profile() {
   const location = useLocation();
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
-  const queryParams = useMemo(
-    () => new URLSearchParams(location.search),
-    [location.search]
-  );
   const paramId = location.pathname.split("/")[2];
 
   useEffect(() => {

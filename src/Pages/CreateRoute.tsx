@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import ReactFlow, {
   Background,
   BackgroundVariant,
+  Connection,
   ConnectionMode,
   Controls,
   Edge,
+  Node,
   ReactFlowProvider,
   addEdge,
   useEdgesState,
@@ -22,6 +24,7 @@ import StartNode from "../Nodes/StartNode/StartNode";
 import UpdateNode from "../Nodes/UpdateNode/UpdateNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { RootState } from "../store";
+import { useLocation } from "react-router-dom";
 
 const initialNodes = [
   {
@@ -55,9 +58,13 @@ const MyFlow = () => {
     (state: RootState) => state.customNode.selectedNode
   );
   const { setViewport } = useReactFlow();
+  const location = useLocation()
+  const paramId = location.pathname.split('/')[2]
+  
+
 
   const onConnect = useCallback(
-    (params) => {
+    (params: Connection) => {
       console.log(params);
       setEdges((eds) => {
         const temp = {
@@ -71,18 +78,19 @@ const MyFlow = () => {
     [setEdges]
   );
 
-  const onDragOver = useCallback((event) => {
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
   const onDrop = useCallback(
-    (event) => {
+    (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
       if (reactFlowWrapper && reactFlowWrapper.current) {
         const reactFlowBounds =
           reactFlowWrapper.current.getBoundingClientRect();
-        let type = event.dataTransfer.getData("application/reactflow");
+        const type = event.dataTransfer.getData("application/reactflow");
+        console.log(type);
         // check if the dropped element is valid
         if (typeof type === "undefined" || !type) {
           return;
@@ -92,20 +100,21 @@ const MyFlow = () => {
           x: event.clientX - reactFlowBounds.left,
           y: event.clientY - reactFlowBounds.top,
         });
-        type = JSON.parse(type);
+        const typeData: { label: string; image: string; type: string } =
+          JSON.parse(type);
         let newNode = {};
 
         // Node setting for vehicle node
         // if (type.type === "vehicleNode") {
         newNode = {
           id: getId(),
-          type: type.type,
+          type: typeData.type,
           position,
-          data: { label: type.label, image: type.image },
+          data: { label: typeData.label, image: typeData.image },
         };
         // }
 
-        setNodes((nds) => nds.concat(newNode));
+        setNodes((nds) => nds.concat(newNode as Node));
       }
     },
     [reactFlowInstance, setNodes]
@@ -144,7 +153,7 @@ const MyFlow = () => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
       >
-        <CreateRouteTopbar reactFlowInstance={reactFlowInstance} />
+        <CreateRouteTopbar reactFlowInstance={reactFlowInstance} paramId={paramId} />
         <Background
           color="grey"
           variant={"dots" as BackgroundVariant}

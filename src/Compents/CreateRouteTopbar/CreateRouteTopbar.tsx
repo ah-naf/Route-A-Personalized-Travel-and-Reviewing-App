@@ -19,7 +19,8 @@ const MONTH = [
   "Dec",
 ];
 
-function CreateRouteTopbar({ reactFlowInstance, type = "edit" }) {
+function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
+  const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("untitled");
   const dispatch = useDispatch();
   const lastUpdated = useSelector(
@@ -40,31 +41,44 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit" }) {
     }
   }, [dispatch]);
 
-  const onSave = useCallback(() => {
-    if (reactFlowInstance) {
-      const flow = reactFlowInstance.toObject();
+  const onSave = useCallback(
+    (published: boolean) => {
+      if (reactFlowInstance) {
+        const flow = reactFlowInstance.toObject();
 
-      const currentDate = new Date();
+        const currentDate = new Date();
 
-      const day = String(currentDate.getDate()).padStart(2, "0");
-      const month = currentDate.getMonth();
-      const year = currentDate.getFullYear();
+        const day = String(currentDate.getDate()).padStart(2, "0");
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
 
-      const hours = String(currentDate.getHours()).padStart(2, "0");
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+        const hours = String(currentDate.getHours()).padStart(2, "0");
+        const minutes = String(currentDate.getMinutes()).padStart(2, "0");
 
-      const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
-      dispatch(setLastUpdatedTime(formattedDate));
+        const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
+        dispatch(setLastUpdatedTime(formattedDate));
 
-      localStorage.setItem(
-        "current_flow",
-        JSON.stringify({ ...flow, lastUpdated: formattedDate })
-      );
-    }
-  }, [reactFlowInstance, dispatch]);
+        const toSave = {
+          flow,
+          lastUpdated: formattedDate,
+          userId: user?.id,
+          published,
+          title,
+        };
+        console.log(toSave);
+
+        // TODO: Delete it after connecting to db
+        localStorage.setItem(
+          "current_flow",
+          JSON.stringify({ ...flow, lastUpdated: formattedDate })
+        );
+      }
+    },
+    [reactFlowInstance, dispatch]
+  );
 
   // Calculate Minimum time/cost
-  const handleRouteOption = (evt) => {
+  const handleRouteOption = (evt: React.ChangeEvent<HTMLSelectElement>) => {
     const adjacencyList = new Map();
     let edgePathMap; // To store the edge path and its corresponding cost.
     let maxVal = Infinity;
@@ -174,13 +188,13 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit" }) {
         <div className="flex items-center gap-2 font-secondary text-[1rem]">
           <button
             className="p-1 px-3 border-2 rounded-md text-gray-800 border-gray-300 hover:text-black"
-            onClick={onSave}
+            onClick={() => onSave(false)}
           >
             Save as draft
           </button>
           <button
             className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white"
-            // onClick={handleClick}
+            onClick={() => onSave(true)}
           >
             Publish
           </button>
