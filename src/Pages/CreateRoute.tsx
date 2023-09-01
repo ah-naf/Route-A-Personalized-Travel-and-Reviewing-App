@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -23,8 +24,8 @@ import RouteNode from "../Nodes/RouteNode/RouteNode";
 import StartNode from "../Nodes/StartNode/StartNode";
 import UpdateNode from "../Nodes/UpdateNode/UpdateNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
+import { verifyUserThunk } from "../slices/AuthSlice";
 import { RootState } from "../store";
-import { useLocation } from "react-router-dom";
 
 const initialNodes = [
   {
@@ -57,11 +58,16 @@ const MyFlow = () => {
   const selectedNode = useSelector(
     (state: RootState) => state.customNode.selectedNode
   );
+  const auth = useSelector((state: RootState) => state.auth);
   const { setViewport } = useReactFlow();
-  const location = useLocation()
-  const paramId = location.pathname.split('/')[2]
-  
+  const location = useLocation();
+  const paramId = location.pathname.split("/")[2];
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (auth.status === "idle") dispatch(verifyUserThunk() as any);
+    if (auth.status === "failed") window.location.href = "/";
+  }, [auth.status]);
 
   const onConnect = useCallback(
     (params: Connection) => {
@@ -153,7 +159,10 @@ const MyFlow = () => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
       >
-        <CreateRouteTopbar reactFlowInstance={reactFlowInstance} paramId={paramId} />
+        <CreateRouteTopbar
+          reactFlowInstance={reactFlowInstance}
+          paramId={paramId}
+        />
         <Background
           color="grey"
           variant={"dots" as BackgroundVariant}

@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useEdges, useNodes, useReactFlow } from "reactflow";
 import { setLastUpdatedTime } from "../../slices/CustomNodeSlice";
+import { postRouteThunk } from "../../slices/RouteSlice";
 import { RootState } from "../../store";
+import { FlowType } from "../../util";
 
 const MONTH = [
   "Jan",
@@ -29,6 +32,8 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
   const node = useNodes();
   const edge = useEdges();
   const rflow = useReactFlow();
+  const isLoading = useSelector((state: RootState) => state.route.loading);
+  const [mode, setMode] = useState("draft");
 
   useEffect(() => {
     const tempFlow = localStorage.getItem("current_flow");
@@ -41,40 +46,46 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
     }
   }, [dispatch]);
 
+  const calculateDate = () => {
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
+
+    const hours = String(currentDate.getHours()).padStart(2, "0");
+    const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+
+    const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
+    dispatch(setLastUpdatedTime(formattedDate));
+  };
+
   const onSave = useCallback(
     (published: boolean) => {
       if (reactFlowInstance) {
-        const flow = reactFlowInstance.toObject();
+        const flow: FlowType = reactFlowInstance.toObject();
 
-        const currentDate = new Date();
+        if (!user || !user.id) {
+          toast.error("Something wrong happend.");
+          return;
+        }
 
-        const day = String(currentDate.getDate()).padStart(2, "0");
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear();
-
-        const hours = String(currentDate.getHours()).padStart(2, "0");
-        const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-
-        const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
-        dispatch(setLastUpdatedTime(formattedDate));
+        calculateDate();
+        if (published) setMode("published");
 
         const toSave = {
+          id: paramId,
           flow,
-          lastUpdated: formattedDate,
-          userId: user?.id,
+          userId: user.id,
           published,
           title,
         };
-        console.log(toSave);
-
+        console.log(title);
+        dispatch(postRouteThunk({ ...toSave }) as any);
         // TODO: Delete it after connecting to db
-        localStorage.setItem(
-          "current_flow",
-          JSON.stringify({ ...flow, lastUpdated: formattedDate })
-        );
+        localStorage.setItem("current_flow", JSON.stringify({ ...flow }));
       }
     },
-    [reactFlowInstance, dispatch]
+    [reactFlowInstance, dispatch, title, user]
   );
 
   // Calculate Minimum time/cost
@@ -158,6 +169,7 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
 
   return (
     <div className="absolute top-0 w-full z-[100] flex items-center justify-between p-3 px-4 bg-white border-l-2 shadow">
+      <Toaster />
       <div>
         <input
           type="text"
@@ -165,7 +177,9 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
           placeholder="Enter title"
           value={title}
           disabled={type === "show"}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
         />
         <p className="font-secondary text-xs mt-2 text-gray-400">
           {lastUpdated && (
@@ -175,45 +189,49 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
           )}
           <span
             className={`${
-              type === "show"
+              type === "show" || mode === "published"
                 ? "bg-green-300 text-green-800"
                 : "bg-orange-200 text-orange-800"
             } font-[500] py-1 px-2 rounded`}
           >
-            {type === "show" ? "Published" : "In progress"}
+            {type === "show" || mode === "published"
+              ? "Published"
+              : "In progress"}
           </span>
         </p>
       </div>
-      {type !== "show" ? (
-        <div className="flex items-center gap-2 font-secondary text-[1rem]">
+
+      <div className="ml-auto mr-4">
+        <label htmlFor="route_option" className="mr-1 font-medium">
+          Route Options:{" "}
+        </label>
+        <select
+          name="route_option"
+          className="p-2 rounded bg-transparent border-2 border-gray-700"
+          id="route_option"
+          onChange={handleRouteOption}
+        >
+          <option value="default">Default</option>
+          <option value="cost">Minimum Cost</option>
+          <option value="time">Minimum Time</option>
+        </select>
+      </div>
+      {type === "edit" && (
+        <div className=" flex items-center gap-2 font-secondary text-[1rem]">
           <button
             className="p-1 px-3 border-2 rounded-md text-gray-800 border-gray-300 hover:text-black"
             onClick={() => onSave(false)}
+            disabled={isLoading}
           >
             Save as draft
           </button>
           <button
             className="p-1 px-3 border-2 rounded-md bg-black text-gray-100 hover:text-white"
             onClick={() => onSave(true)}
+            disabled={isLoading}
           >
             Publish
           </button>
-        </div>
-      ) : (
-        <div>
-          <label htmlFor="route_option" className="mr-1 font-medium">
-            Route Options:{" "}
-          </label>
-          <select
-            name="route_option"
-            className="p-2 rounded bg-transparent border-2 border-gray-700"
-            id="route_option"
-            onChange={handleRouteOption}
-          >
-            <option value="default">Default</option>
-            <option value="cost">Minimum Cost</option>
-            <option value="time">Minimum Time</option>
-          </select>
         </div>
       )}
     </div>

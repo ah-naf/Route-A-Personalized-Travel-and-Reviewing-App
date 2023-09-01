@@ -79,7 +79,7 @@ function Register() {
                 Or use your email for registration
               </p>
               <div className="mt-4">
-                {auth.status === "failed" && (
+                {auth.status === "failed" && auth.msg && (
                   <p className="text-center bg-red-400 p-1 text-gray-50 font-medium rounded mb-1">
                     {auth.msg}
                   </p>

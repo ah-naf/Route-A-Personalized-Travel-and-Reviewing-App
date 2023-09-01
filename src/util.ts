@@ -1,5 +1,6 @@
 import { UploadFile } from "antd";
 import { clsx, type ClassValue } from "clsx";
+import { Edge, Node } from "reactflow";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -49,11 +50,46 @@ export type UserType = {
   username: string;
   email: string;
   avatar: BigHeadPropsType;
-  bio ?: string
-  url ?: string
-  phone ?: string
-  createdAt: string
+  bio?: string;
+  url?: string;
+  phone?: string;
+  createdAt: string;
 };
+
+export type FlowType = {
+  edges: Edge[];
+  nodes: Node[];
+};
+
+export type CommentType = {
+  id: string;
+  text: string;
+  userId: string;
+  routeId: string;
+  user?: UserType;
+  createdAt?: string;
+};
+
+export type LikeType = {
+  id: string;
+  userId: string;
+  routeId: string;
+  user?: UserType;
+  createdAt?: string;
+};
+
+export interface RoutePostType {
+  flow: FlowType;
+  id: string;
+  title: string;
+  published: boolean;
+  userId: string;
+  user?: UserType;
+  updatedAt?: string;
+  createdAt?: string;
+  comments?: CommentType[];
+  likes?: LikeType[];
+}
 
 // Auth Slice Initial State Type
 export interface AuthSliceStateType {
@@ -62,6 +98,12 @@ export interface AuthSliceStateType {
   token: string | null | undefined;
   msg: string | null | undefined;
   status: "success" | "loading" | "failed" | "idle";
+  loading: boolean
+}
+
+// Route Slice Initial State Type
+export interface RouteSliceStateType {
+  loading: boolean
 }
 
 export const vehicles = [

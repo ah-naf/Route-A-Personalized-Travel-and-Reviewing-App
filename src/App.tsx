@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import AddNewPlace from "./Pages/AddNewPlace";
 import CreateRoute from "./Pages/CreateRoute";
 import Discover from "./Pages/Discover";
@@ -34,14 +34,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      {auth && (
-        <Route
-          path="/create/:id"
-          element={
-            auth.user && auth.user.id ? <CreateRoute /> : <Navigate to={"/"} />
-          }
-        />
-      )}
+      {auth && <Route path="/create/:id" element={<CreateRoute />} />}
       <Route path="/temp" element={<TempPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/login" element={<AuthRestrictedRoute element={Login} />} />

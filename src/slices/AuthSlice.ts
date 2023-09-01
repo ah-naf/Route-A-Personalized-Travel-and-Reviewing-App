@@ -119,6 +119,7 @@ const initialState: AuthSliceStateType = {
   token: "",
   msg: "",
   status: "idle",
+  loading: false,
 };
 
 export const AuthSlice = createSlice({
@@ -152,19 +153,30 @@ export const AuthSlice = createSlice({
       state.status = "success";
       state.token = action.payload.token;
       state.user = action.payload.user;
+      state.loading = false;
     },
     [loginUserThunk.pending.type]: (state, action) => {
       state.status = "loading";
+      state.loading = true;
     },
     [loginUserThunk.rejected.type]: (state, action) => {
       state.status = "failed";
       state.msg = action.payload.msg;
+      state.loading = false;
     },
     [verifyUserThunk.fulfilled.type]: (state, action) => {
       state.msg = action.payload.msg;
       state.status = "success";
       state.token = action.payload.token;
       state.user = action.payload.user;
+      state.loading = false;
+    },
+    [verifyUserThunk.pending.type]: (state, action) => {
+      state.loading = true;
+    },
+    [verifyUserThunk.rejected.type]: (state, action) => {
+      state.loading = false;
+      state.status = 'failed'
     },
     [logoutUserThunk.fulfilled.type]: (state, action) => {
       state.msg = action.payload.msg;

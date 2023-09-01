@@ -9,10 +9,12 @@ import UserNavbarMenu from "../UserNavbarMenu/UserNavbarMenu";
 
 function Navbar() {
   const user = useSelector((state: RootState) => state.auth.user);
+
+  const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(verifyUserThunk() as any);
+    if (auth.status === "idle") dispatch(verifyUserThunk() as any);
   }, []);
 
   return (

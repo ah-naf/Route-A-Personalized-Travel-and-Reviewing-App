@@ -17,10 +17,14 @@ function UserNavbarMenu() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
 
+  const auth = useSelector((state: RootState) => state.auth);
+
   const handleLogout = () => {
     dispatch(logoutUserThunk() as any);
     window.location.href = "/";
   };
+
+  if (auth.loading) return <div></div>;
 
   return (
     <DropdownMenu>

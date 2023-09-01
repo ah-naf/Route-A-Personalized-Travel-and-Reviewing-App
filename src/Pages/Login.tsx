@@ -48,7 +48,7 @@ function Login() {
                 Please enter your details.
               </p>
               <div className="mt-8">
-                {auth.status === "failed" && (
+                {auth.status === "failed" && auth.msg && (
                   <p className="text-center bg-red-400 p-1 text-gray-50 font-medium rounded mb-1">
                     {auth.msg}
                   </p>
