@@ -1,6 +1,6 @@
 import { UploadFile } from "antd";
 import { clsx, type ClassValue } from "clsx";
-import { Edge, Node } from "reactflow";
+import { Edge, Node, Viewport } from "reactflow";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -59,6 +59,7 @@ export type UserType = {
 export type FlowType = {
   edges: Edge[];
   nodes: Node[];
+  viewport: Viewport;
 };
 
 export type CommentType = {
@@ -98,12 +99,14 @@ export interface AuthSliceStateType {
   token: string | null | undefined;
   msg: string | null | undefined;
   status: "success" | "loading" | "failed" | "idle";
-  loading: boolean
+  loading: boolean;
 }
 
 // Route Slice Initial State Type
 export interface RouteSliceStateType {
-  loading: boolean
+  loading: boolean;
+  routes: RoutePostType[];
+  activeRoute: RoutePostType | null | undefined;
 }
 
 export const vehicles = [
@@ -209,3 +212,32 @@ export const BigHeadOptions = {
 };
 
 export type BigHeadKeyType = keyof typeof BigHeadOptions;
+
+const MONTH = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+export const calculateDate = (date = "") => {
+  let currentDate = new Date();
+  if (date) currentDate = new Date(date);
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+
+  const hours = String(currentDate.getHours()).padStart(2, "0");
+  const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+
+  const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
+  return formattedDate;
+};

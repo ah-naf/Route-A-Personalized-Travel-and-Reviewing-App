@@ -5,24 +5,11 @@ import { useEdges, useNodes, useReactFlow } from "reactflow";
 import { setLastUpdatedTime } from "../../slices/CustomNodeSlice";
 import { postRouteThunk } from "../../slices/RouteSlice";
 import { RootState } from "../../store";
-import { FlowType } from "../../util";
+import { FlowType, calculateDate } from "../../util";
 
-const MONTH = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "June",
-  "July",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
-function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
+
+function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
   const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("untitled");
   const dispatch = useDispatch();
@@ -32,8 +19,16 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
   const node = useNodes();
   const edge = useEdges();
   const rflow = useReactFlow();
+  const activeRoute = useSelector((state: RootState) => state.route.activeRoute)
   const isLoading = useSelector((state: RootState) => state.route.loading);
   const [mode, setMode] = useState("draft");
+
+  useEffect(() => {
+    if(type === 'show' && activeRoute) {
+      setTitle(activeRoute.title)
+      dispatch(setLastUpdatedTime(activeRoute.updatedAt));
+    }
+  }, [type, activeRoute])
 
   useEffect(() => {
     const tempFlow = localStorage.getItem("current_flow");
@@ -46,30 +41,21 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
     }
   }, [dispatch]);
 
-  const calculateDate = () => {
-    const currentDate = new Date();
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
-
-    const hours = String(currentDate.getHours()).padStart(2, "0");
-    const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-
-    const formattedDate = `${day} ${MONTH[month]} ${year} ${hours}:${minutes}`;
-    dispatch(setLastUpdatedTime(formattedDate));
-  };
+  
 
   const onSave = useCallback(
     (published: boolean) => {
       if (reactFlowInstance) {
         const flow: FlowType = reactFlowInstance.toObject();
-
+        
         if (!user || !user.id) {
           toast.error("Something wrong happend.");
           return;
         }
 
-        calculateDate();
+        const formattedDate = calculateDate();
+        dispatch(setLastUpdatedTime(formattedDate));
+
         if (published) setMode("published");
 
         const toSave = {
@@ -79,7 +65,6 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId }) {
           published,
           title,
         };
-        console.log(title);
         dispatch(postRouteThunk({ ...toSave }) as any);
         // TODO: Delete it after connecting to db
         localStorage.setItem("current_flow", JSON.stringify({ ...flow }));

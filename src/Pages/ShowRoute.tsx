@@ -11,17 +11,19 @@ import {
   useReactFlow,
 } from "reactflow";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import CreateRouteLeftbar from "../Compents/CreateRouteLeftBar/CreateRouteLeftbar";
 import CreateRouteTopbar from "../Compents/CreateRouteTopbar/CreateRouteTopbar";
+import Suggestions from "../Compents/Suggestions/Suggestions";
+import UserReview from "../Compents/UserReview/UserReview";
 import EndNode from "../Nodes/EndNode/EndNode";
 import RouteNode from "../Nodes/RouteNode/RouteNode";
 import StartNode from "../Nodes/StartNode/StartNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import ViewRouteNode from "../Nodes/ViewNode/ViewRouteNode";
+import { getSingleRouteThunk } from "../slices/RouteSlice";
 import { RootState } from "../store";
-import UserReview from "../Compents/UserReview/UserReview";
-import Suggestions from "../Compents/Suggestions/Suggestions";
 
 const nodeTypes = {
   startNode: StartNode,
@@ -39,13 +41,17 @@ const MyFlow = () => {
   const selectedNode = useSelector(
     (state: RootState) => state.customNode.selectedNode
   );
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const paramId = location.pathname.split("/")[2];
+  const currentRoute = useSelector(
+    (state: RootState) => state.route.activeRoute
+  );
 
-  // TODO: Pore Backend tekhe data ana lagbe.
   useEffect(() => {
-    const restoreFlow = async () => {
-      const tempFlow = localStorage.getItem("current_flow");
-      if (tempFlow) {
-        const flow = JSON.parse(tempFlow);
+    if (currentRoute) {
+      if (currentRoute.flow) {
+        const flow = currentRoute.flow;
         if (flow) {
           const { x = 0, y = 0, zoom = 1 } = flow.viewport;
           setNodes(flow.nodes || []);
@@ -53,10 +59,13 @@ const MyFlow = () => {
           setViewport({ x, y, zoom });
         }
       }
-    };
+    }
+  }, [currentRoute, setNodes, setEdges, setViewport]);
 
-    restoreFlow();
-  }, [setNodes, setEdges, setViewport]);
+  // TODO: Pore Backend tekhe data ana lagbe.
+  useEffect(() => {
+    dispatch(getSingleRouteThunk(paramId) as any);
+  }, [paramId]);
 
   return (
     <div className="w-full h-full flex relative" ref={reactFlowWrapper}>
@@ -72,7 +81,7 @@ const MyFlow = () => {
         nodeTypes={nodeTypes}
         connectionMode={ConnectionMode.Loose}
       >
-        <CreateRouteTopbar reactFlowInstance={reactFlowInstance} type='show' />
+        <CreateRouteTopbar reactFlowInstance={reactFlowInstance} type="show" />
         <Background
           color="grey"
           variant={"dots" as BackgroundVariant}
