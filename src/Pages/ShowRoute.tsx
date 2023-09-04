@@ -22,6 +22,7 @@ import RouteNode from "../Nodes/RouteNode/RouteNode";
 import StartNode from "../Nodes/StartNode/StartNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import ViewRouteNode from "../Nodes/ViewNode/ViewRouteNode";
+import { verifyUserThunk } from "../slices/AuthSlice";
 import { getSingleRouteThunk } from "../slices/RouteSlice";
 import { RootState } from "../store";
 
@@ -47,6 +48,12 @@ const MyFlow = () => {
   const currentRoute = useSelector(
     (state: RootState) => state.route.activeRoute
   );
+  const auth = useSelector((state: RootState) => state.auth);
+  const render = useSelector((state: RootState) => state.route.render);
+
+  useEffect(() => {
+    if (auth.status === "idle") dispatch(verifyUserThunk() as any);
+  }, [auth.status]);
 
   useEffect(() => {
     if (currentRoute) {
@@ -65,7 +72,7 @@ const MyFlow = () => {
   // TODO: Pore Backend tekhe data ana lagbe.
   useEffect(() => {
     dispatch(getSingleRouteThunk(paramId) as any);
-  }, [paramId]);
+  }, [paramId, render]);
 
   return (
     <div className="w-full h-full flex relative" ref={reactFlowWrapper}>

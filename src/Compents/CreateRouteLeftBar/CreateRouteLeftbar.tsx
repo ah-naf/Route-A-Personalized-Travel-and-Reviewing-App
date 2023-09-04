@@ -1,14 +1,22 @@
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BiHelpCircle, BiLogIn } from "react-icons/bi";
 import { LuLogOut } from "react-icons/lu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../store";
 import Bookmarks from "../Bookmarks/Bookmarks";
 import UserNavbarMenu from "../UserNavbarMenu/UserNavbarMenu";
+import { logoutUserThunk } from "../../slices/AuthSlice";
 
 function CreateRouteTopbar() {
   const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch()
+
+  const handleLogout = () => {
+    dispatch(logoutUserThunk() as any);
+    window.location.href = "/";
+  };
+
   return (
     <div className=" flex flex-col justify-between items-center p-4 shadow-lg h-screen max-w-[55px] bg-white text-gray-600 border">
       <div className="flex flex-col items-center gap-2">
@@ -41,6 +49,7 @@ function CreateRouteTopbar() {
             size={25}
             className="hover:text-red-600 cursor-pointer"
             title="Logout"
+            onClick={handleLogout}
           />
         </div>
       ) : (

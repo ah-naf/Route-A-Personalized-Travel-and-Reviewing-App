@@ -146,7 +146,7 @@ function CreateRouteDialog() {
                       <div>
                         <h3 className="font-medium ">{val.title}</h3>
                         <p className="text-xs font-light">
-                          Published At : {val.updatedAt}
+                          Published At : {calculateDate(val.updatedAt)}
                         </p>
                       </div>
                       <Eye className="cursor-pointer w-4 h-4" />

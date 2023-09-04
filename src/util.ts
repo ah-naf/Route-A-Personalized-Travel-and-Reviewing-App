@@ -107,6 +107,9 @@ export interface RouteSliceStateType {
   loading: boolean;
   routes: RoutePostType[];
   activeRoute: RoutePostType | null | undefined;
+  suggestions: RoutePostType[];
+  comments: CommentType[]
+  render: boolean
 }
 
 export const vehicles = [
