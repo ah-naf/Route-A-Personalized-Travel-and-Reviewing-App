@@ -10,6 +10,9 @@ import UserSetting from "../UserSetting/UserSetting";
 function ProfileRight() {
   const [option, setOption] = useState("User Routes");
   const auth = useSelector((state: RootState) => state.auth);
+  const profileUser = useSelector(
+    (state: RootState) => state.profile.profileUser
+  );
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search).get("tab");
   const [options, setOptions] = useState([
@@ -22,11 +25,11 @@ function ProfileRight() {
     if (queryParams === "setting") setOption("Settings");
     if (
       auth.user?.id &&
-      auth.profileUser?.id &&
-      auth.user?.id != auth.profileUser?.id
+      profileUser?.id &&
+      auth.user?.id != profileUser?.id
     )
       setOptions(options.filter((val) => val !== "Settings"));
-  }, [queryParams, auth.profileUser?.id, auth.user?.id]);
+  }, [queryParams, profileUser?.id, auth.user?.id]);
 
   return (
     <div className="bg-white rounded-lg basis-2/3 overflow-y-auto relative flex flex-col shadow">
@@ -50,7 +53,7 @@ function ProfileRight() {
           </ConfigProvider>
         </div>
       </div>
-      <div className="mt-2 flex-1">
+      <div className="mt-2 flex-1 ">
         {option === "User Routes" && <UserRoutes />}
         {option === "Activity" && <UserActivity />}
         {option === "Settings" && <UserSetting />}

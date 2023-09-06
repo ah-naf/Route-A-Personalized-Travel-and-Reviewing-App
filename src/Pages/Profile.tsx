@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../Compents/Navbar/Navbar";
 import ProfileLeft from "../Compents/ProfileLeft/ProfileLeft";
 import ProfileRight from "../Compents/ProfileRight/ProfileRight";
-import { getUserThunk } from "../slices/AuthSlice";
+import { getUserThunk } from "../slices/ProfileSlice";
 import { RootState } from "../store";
 
 function Profile() {

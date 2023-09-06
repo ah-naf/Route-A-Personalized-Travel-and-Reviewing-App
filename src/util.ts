@@ -95,7 +95,6 @@ export interface RoutePostType {
 // Auth Slice Initial State Type
 export interface AuthSliceStateType {
   user: UserType | null | undefined;
-  profileUser: UserType | null | undefined;
   token: string | null | undefined;
   msg: string | null | undefined;
   status: "success" | "loading" | "failed" | "idle";
@@ -110,6 +109,12 @@ export interface RouteSliceStateType {
   suggestions: RoutePostType[];
   comments: CommentType[]
   render: boolean
+}
+
+export interface ProfileSliceStateType {
+  profileUser: UserType | null | undefined
+  userRoutes: RoutePostType[]
+  loading: boolean
 }
 
 export const vehicles = [

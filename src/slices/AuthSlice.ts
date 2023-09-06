@@ -80,16 +80,7 @@ export const logoutUserThunk = createAsyncThunk(
   }
 );
 
-export const getUserThunk = createAsyncThunk(
-  "auth/getUser",
-  async (payload: string) => {
-    const res = await fetch(`${URL}/user/${payload}`, {
-      credentials: "include",
-    });
-    const data = await res.json();
-    return data;
-  }
-);
+
 
 export const updateUserThunk = createAsyncThunk(
   "auth/updateUser",
@@ -115,7 +106,6 @@ export const updateUserThunk = createAsyncThunk(
 
 const initialState: AuthSliceStateType = {
   user: null,
-  profileUser: null,
   token: "",
   msg: "",
   status: "idle",
@@ -131,7 +121,6 @@ export const AuthSlice = createSlice({
     },
     authSetUser: (state, { payload }) => {
       state.user = payload;
-      state.profileUser = payload;
     },
   },
   extraReducers: {
@@ -184,16 +173,7 @@ export const AuthSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
-    [getUserThunk.pending.type]: (state, action) => {
-      state.status = "loading";
-    },
-    [getUserThunk.fulfilled.type]: (state, action) => {
-      state.status = "success";
-      state.profileUser = action.payload.user;
-    },
-    [getUserThunk.rejected.type]: (state, action) => {
-      state.status = "failed";
-    },
+    
     [updateUserThunk.pending.type]: (state, action) => {
       state.status = "loading";
     },

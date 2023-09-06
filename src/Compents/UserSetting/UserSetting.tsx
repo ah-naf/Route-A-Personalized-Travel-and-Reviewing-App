@@ -1,11 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  authSetStatus,
-  authSetUser,
-  updateUserThunk,
-} from "../../slices/AuthSlice";
+import { authSetUser, updateUserThunk } from "../../slices/AuthSlice";
+import { profileSetUser } from "../../slices/ProfileSlice";
 import { RootState } from "../../store";
 import { UserType } from "../../util";
 
@@ -14,12 +11,13 @@ function UserSetting() {
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [inputData, setInputData] = useState<UserType | null | undefined>(user);
-  
+
   useEffect(() => {
-    if(auth.status === 'success') {
-      dispatch(authSetUser(inputData))
+    if (auth.status === "success") {
+      dispatch(authSetUser(inputData));
+      dispatch(profileSetUser(inputData));
     }
-  }, [auth.status])
+  }, [auth.status]);
 
   const handleSubmit = () => {
     if (!inputData) return;

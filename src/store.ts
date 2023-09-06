@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import AuthSlice from "./slices/AuthSlice";
 import CustomNodeSlice from "./slices/CustomNodeSlice";
+import ProfileSlice from "./slices/ProfileSlice";
 import RouteSlice from "./slices/RouteSlice";
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
     customNode: CustomNodeSlice,
     auth: AuthSlice,
     route: RouteSlice,
+    profile: ProfileSlice,
   },
 });
 

@@ -28,8 +28,11 @@ const MONTH = [
 function ProfileLeft() {
   const { token } = theme.useToken();
   const [bgColor, setBgColor] = useState<string>(token.colorPrimary);
-  const status = useSelector((state: RootState) => state.auth.status);
-  const auth = useSelector((state: RootState) => state.auth);
+  const loading = useSelector((state: RootState) => state.profile.loading);
+
+  const profileUser = useSelector(
+    (state: RootState) => state.profile.profileUser
+  );
   const [joined, setJoined] = useState({
     month: "",
     day: 1,
@@ -37,8 +40,8 @@ function ProfileLeft() {
   });
 
   useEffect(() => {
-    if (auth.profileUser && auth.profileUser?.createdAt) {
-      const date = new Date(auth.profileUser.createdAt);
+    if (profileUser && profileUser?.createdAt) {
+      const date = new Date(profileUser.createdAt);
 
       setJoined({
         month: MONTH[date.getMonth()],
@@ -46,13 +49,13 @@ function ProfileLeft() {
         day: date.getDate(),
       });
     }
-  }, [auth.profileUser]);
+  }, [profileUser]);
 
   return (
     <div className="basis-1/3">
       <div className="grid grid-cols-1 gap-4">
         <div className="bg-white p-2 rounded-lg pt-3 shadow">
-          {status === "loading" ? (
+          {loading ? (
             <div className="flex flex-col items-center gap-4">
               <Skeleton
                 variant="rectangular"
@@ -77,34 +80,30 @@ function ProfileLeft() {
                 </ColorPicker>
               </span>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 shadow-lg w-24 h-24 bg-white rounded-full pb-4 px-1 flex items-center">
-                <BigHead {...auth.profileUser?.avatar} />
+                <BigHead {...profileUser?.avatar} />
               </div>
             </div>
           )}
-          <div
-            className={`text-center ${
-              status === "loading" ? "pt-4" : "pt-16"
-            } px-4`}
-          >
-            {status === "loading" ? (
+          <div className={`text-center ${loading ? "pt-4" : "pt-16"} px-4`}>
+            {loading ? (
               <div className="flex justify-center">
                 <Skeleton variant="text" width={80} className="" />
               </div>
             ) : (
               <p className="font-primary tracking-wider font-medium text-gray-600">
-                @{auth.profileUser?.username}
+                @{profileUser?.username}
               </p>
             )}
-            {status === "loading" ? (
+            {loading ? (
               <div className="flex justify-center">
                 <Skeleton variant="text" className="w-full" />
               </div>
             ) : (
               <h3 className="font-medium tracking-wide text-2xl">
-                {auth.profileUser?.name}
+                {profileUser?.name}
               </h3>
             )}
-            {status === "loading" ? (
+            {loading ? (
               <div className="flex justify-center gap-4 max-w-[80%] mx-auto">
                 <Skeleton variant="text" className="w-full" />
                 <Skeleton variant="text" className="w-full" />
@@ -119,11 +118,11 @@ function ProfileLeft() {
                 </span>{" "}
               </p>
             )}
-            {status === "loading" ? (
+            {loading ? (
               <Skeleton variant="text" className="w-full" height={100} />
             ) : (
               <p className="px-2 mt-4 font-primary text-sm tracking-wide leading-6">
-                {auth.profileUser?.bio}
+                {profileUser?.bio}
               </p>
             )}
           </div>
@@ -136,11 +135,11 @@ function ProfileLeft() {
                 <CgWebsite />
                 Website
               </span>
-              {status === "loading" ? (
+              {loading ? (
                 <Skeleton variant="text" className="ml-auto" width={100} />
               ) : (
                 <span className="ml-auto text-black text-sm  font-medium">
-                  {auth.profileUser?.url}
+                  {profileUser?.url}
                 </span>
               )}
             </p>
@@ -149,11 +148,11 @@ function ProfileLeft() {
                 <HiOutlineMail />
                 E-mail
               </span>
-              {status === "loading" ? (
+              {loading ? (
                 <Skeleton variant="text" className="ml-auto" width={100} />
               ) : (
                 <span className="ml-auto text-black tracking-wide text-sm  font-medium">
-                  {auth.profileUser?.email}
+                  {profileUser?.email}
                 </span>
               )}
             </p>
@@ -162,11 +161,11 @@ function ProfileLeft() {
                 <BsTelephone />
                 Phone
               </span>
-              {status === "loading" ? (
+              {loading ? (
                 <Skeleton variant="text" className="ml-auto" width={100} />
               ) : (
                 <span className="ml-auto text-black  tracking-wide text-sm  font-medium">
-                  {auth.profileUser?.phone}
+                  {profileUser?.phone}
                 </span>
               )}
             </p>
@@ -175,7 +174,7 @@ function ProfileLeft() {
                 <AiOutlineCalendar />
                 Joined
               </span>
-              {status === "loading" ? (
+              {loading ? (
                 <Skeleton variant="text" className="ml-auto" width={100} />
               ) : (
                 <span className="ml-auto text-black tracking-wide text-sm font-medium">
