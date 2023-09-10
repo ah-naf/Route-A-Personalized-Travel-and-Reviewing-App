@@ -5,11 +5,9 @@ import { useEdges, useNodes, useReactFlow } from "reactflow";
 import { setLastUpdatedTime } from "../../slices/CustomNodeSlice";
 import { postRouteThunk } from "../../slices/RouteSlice";
 import { RootState } from "../../store";
-import { FlowType, calculateDate } from "../../util";
+import { FlowType, RoutePostType, calculateDate } from "../../util";
 
-
-
-function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
+function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId = "" }) {
   const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("untitled");
   const dispatch = useDispatch();
@@ -19,16 +17,18 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
   const node = useNodes();
   const edge = useEdges();
   const rflow = useReactFlow();
-  const activeRoute = useSelector((state: RootState) => state.route.activeRoute)
+  const activeRoute = useSelector(
+    (state: RootState) => state.route.activeRoute
+  );
   const isLoading = useSelector((state: RootState) => state.route.loading);
   const [mode, setMode] = useState("draft");
 
   useEffect(() => {
-    if(type === 'show' && activeRoute) {
-      setTitle(activeRoute.title)
+    if (type === "show" && activeRoute) {
+      setTitle(activeRoute.title);
       dispatch(setLastUpdatedTime(activeRoute.updatedAt));
     }
-  }, [type, activeRoute])
+  }, [type, activeRoute]);
 
   useEffect(() => {
     const tempFlow = localStorage.getItem("current_flow");
@@ -41,13 +41,11 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
     }
   }, [dispatch]);
 
-  
-
   const onSave = useCallback(
     (published: boolean) => {
       if (reactFlowInstance) {
         const flow: FlowType = reactFlowInstance.toObject();
-        
+
         if (!user || !user.id) {
           toast.error("Something wrong happend.");
           return;
@@ -56,15 +54,24 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
         const formattedDate = calculateDate();
         dispatch(setLastUpdatedTime(formattedDate));
 
-        if (published) setMode("published");
-
-        const toSave = {
+        let time: number;
+        let cost: number;
+        let toSave: RoutePostType = {
           id: paramId,
           flow,
           userId: user.id,
           published,
           title,
         };
+
+        if (published) {
+          setMode("published");
+          cost = handleRouteOption("cost", true) as number;
+          time = handleRouteOption("time", true) as number;
+          toSave = {...toSave, cost, time}
+        }
+        
+        
         dispatch(postRouteThunk({ ...toSave }) as any);
         // TODO: Delete it after connecting to db
         localStorage.setItem("current_flow", JSON.stringify({ ...flow }));
@@ -74,7 +81,7 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
   );
 
   // Calculate Minimum time/cost
-  const handleRouteOption = (evt: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleRouteOption = (evt: string, published = false) => {
     const adjacencyList = new Map();
     let edgePathMap; // To store the edge path and its corresponding cost.
     let maxVal = Infinity;
@@ -130,7 +137,8 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
     const start = node.find((val) => val.type === "startNode")?.id;
 
     if (start) {
-      if (evt.target.value !== "default") dfs(start, evt.target.value);
+      if (evt !== "default") dfs(start, evt);
+      if (published) return maxVal;
       const edgeSet = new Set(edgePathMap);
 
       const temp = rflow.getEdges().map((e) => {
@@ -194,7 +202,7 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId="" }) {
           name="route_option"
           className="p-2 rounded bg-transparent border-2 border-gray-700"
           id="route_option"
-          onChange={handleRouteOption}
+          onChange={(e) => handleRouteOption(e.target.value)}
         >
           <option value="default">Default</option>
           <option value="cost">Minimum Cost</option>

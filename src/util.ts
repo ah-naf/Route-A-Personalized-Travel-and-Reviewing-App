@@ -79,6 +79,12 @@ export type LikeType = {
   createdAt?: string;
 };
 
+export type BookmarkType = {
+  id: string;
+  userId: string;
+  routeId: string;
+};
+
 export interface RoutePostType {
   flow: FlowType;
   id: string;
@@ -90,6 +96,9 @@ export interface RoutePostType {
   createdAt?: string;
   comments?: CommentType[];
   likes?: LikeType[];
+  time?: number;
+  cost?: number;
+  bookmarks: BookmarkType[];
 }
 
 // Auth Slice Initial State Type
@@ -107,14 +116,19 @@ export interface RouteSliceStateType {
   routes: RoutePostType[];
   activeRoute: RoutePostType | null | undefined;
   suggestions: RoutePostType[];
-  comments: CommentType[]
-  render: boolean
+  comments: CommentType[];
+  render: boolean;
 }
 
 export interface ProfileSliceStateType {
-  profileUser: UserType | null | undefined
-  userRoutes: RoutePostType[]
-  loading: boolean
+  profileUser: UserType | null | undefined;
+  userRoutes: RoutePostType[];
+  loading: boolean;
+}
+
+export interface SearchSliceStateType {
+  routes: RoutePostType[];
+  isBookmarked: boolean[];
 }
 
 export const vehicles = [

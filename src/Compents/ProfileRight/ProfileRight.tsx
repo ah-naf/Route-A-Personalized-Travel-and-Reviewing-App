@@ -15,19 +15,11 @@ function ProfileRight() {
   );
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search).get("tab");
-  const [options, setOptions] = useState([
-    "User Routes",
-    "Activity",
-    "Settings",
-  ]);
+  const [options, setOptions] = useState(["User Routes", "Settings"]);
 
   useEffect(() => {
     if (queryParams === "setting") setOption("Settings");
-    if (
-      auth.user?.id &&
-      profileUser?.id &&
-      auth.user?.id != profileUser?.id
-    )
+    if (auth.user?.id && profileUser?.id && auth.user?.id != profileUser?.id)
       setOptions(options.filter((val) => val !== "Settings"));
   }, [queryParams, profileUser?.id, auth.user?.id]);
 

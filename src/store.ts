@@ -3,6 +3,7 @@ import AuthSlice from "./slices/AuthSlice";
 import CustomNodeSlice from "./slices/CustomNodeSlice";
 import ProfileSlice from "./slices/ProfileSlice";
 import RouteSlice from "./slices/RouteSlice";
+import SearchSlice from "./slices/SearchSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: AuthSlice,
     route: RouteSlice,
     profile: ProfileSlice,
+    search: SearchSlice,
   },
 });
 

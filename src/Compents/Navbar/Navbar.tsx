@@ -29,7 +29,9 @@ function Navbar() {
         <button className="hover:underline">
           <Link to={"/discover"}>Discover</Link>
         </button>
-        <button className="hover:underline">Explore</button>
+        <button className="hover:underline">
+          <Link to={"/search"}>Explore</Link>
+        </button>
         {user ? (
           <>
             <CreateRouteDialog />
