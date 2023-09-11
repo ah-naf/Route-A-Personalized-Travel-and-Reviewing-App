@@ -83,6 +83,8 @@ export type BookmarkType = {
   id: string;
   userId: string;
   routeId: string;
+  user?: UserType;
+  route?: RoutePostType;
 };
 
 export interface RoutePostType {
@@ -129,6 +131,7 @@ export interface ProfileSliceStateType {
 export interface SearchSliceStateType {
   routes: RoutePostType[];
   isBookmarked: boolean[];
+  bookmarks: BookmarkType[];
 }
 
 export const vehicles = [

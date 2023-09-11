@@ -1,74 +1,13 @@
 import { Card } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../Compents/Navbar/Navbar";
 import SearchPageTop from "../Compents/SearchPageTop/SearchPageTop";
-import { getAllRouteThunk } from "../slices/SearchSlice";
+import { addBookmarkThunk, getAllRouteThunk } from "../slices/SearchSlice";
 import { RootState } from "../store";
 import { calculateDate } from "../util";
-const DATA = [
-  {
-    place: "Chittagong to Cumilla",
-    last_updated: "02 May 2023",
-    postedBy: "ahnaf",
-    image:
-      "https://media.cntraveler.com/photos/643d5d0a5722b1af03793a06/16:9/w_2560%2Cc_limit/Dal%2520Lake_GettyImages-1323846766.jpg",
-    price: {
-      max: 2000,
-      min: 850,
-    },
-    time: {
-      max: 2,
-      min: 1,
-    },
-  },
-  {
-    place: "Chittagong to Cumilla",
-    last_updated: "02 May 2023",
-    postedBy: "ahnaf",
-    image:
-      "https://media.cntraveler.com/photos/643d5d0a5722b1af03793a06/16:9/w_2560%2Cc_limit/Dal%2520Lake_GettyImages-1323846766.jpg",
-    price: {
-      max: 2000,
-      min: 850,
-    },
-    time: {
-      max: 2,
-      min: 1,
-    },
-  },
-  {
-    place: "Chittagong to Cumilla",
-    last_updated: "02 May 2023",
-    postedBy: "ahnaf",
-    image:
-      "https://media.cntraveler.com/photos/643d5d0a5722b1af03793a06/16:9/w_2560%2Cc_limit/Dal%2520Lake_GettyImages-1323846766.jpg",
-    price: {
-      max: 2000,
-      min: 850,
-    },
-    time: {
-      max: 2,
-      min: 1,
-    },
-  },
-  {
-    place: "Chittagong to Cumilla",
-    last_updated: "02 May 2023",
-    postedBy: "ahnaf",
-    image:
-      "https://media.cntraveler.com/photos/643d5d0a5722b1af03793a06/16:9/w_2560%2Cc_limit/Dal%2520Lake_GettyImages-1323846766.jpg",
-    price: {
-      max: 2000,
-      min: 850,
-    },
-    time: {
-      max: 2,
-      min: 1,
-    },
-  },
-];
 
 interface IsBookmarkedType {
   [key: string]: boolean; // Assuming isBookmarked is a boolean property
@@ -96,15 +35,20 @@ function SearchPage() {
   }, [routes]);
 
   useEffect(() => {
-    console.log(isBookmarked);
-  }, [isBookmarked]);
-
-  useEffect(() => {
     dispatch(getAllRouteThunk() as any);
   }, []);
 
+  const handleBookmark = (routeId: string) => {
+    if (!user) {
+      toast.error("Please sign in to bookmark");
+      return;
+    }
+    dispatch(addBookmarkThunk({ routeId }) as any);
+  };
+
   return (
     <>
+      <Toaster />
       <Navbar />
       <div className="max-w-7xl mx-auto">
         <SearchPageTop />
@@ -114,14 +58,7 @@ function SearchPage() {
           </p>
           <div className="grid grid-cols-4 gap-8">
             {routes.map((val, ind) => (
-              <Card
-                key={val.id}
-                isPressable
-                isHoverable
-                onClick={() => {
-                  window.location.href = "/route/" + val.id;
-                }}
-              >
+              <Card key={val.id} isHoverable>
                 <Card.Body>
                   <div className="p-2">
                     <div className="flex w-full justify-between">
@@ -142,7 +79,10 @@ function SearchPage() {
                           </span>
                         </p>
                       </div>
-                      <div className="mt-1">
+                      <div
+                        className="mt-1 cursor-pointer"
+                        onClick={() => handleBookmark(val.id)}
+                      >
                         <span>
                           {!isBookmarked[val.id] ? (
                             <BsBookmarkHeart

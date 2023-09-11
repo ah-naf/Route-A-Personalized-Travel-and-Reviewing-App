@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { verifyUserThunk } from "../../slices/AuthSlice";
+import { getAllBookmarkThunk } from "../../slices/SearchSlice";
 import { RootState } from "../../store";
 import Bookmarks from "../Bookmarks/Bookmarks";
 import CreateRouteDialog from "../CreateRouteDialog/CreateRouteDialog";
@@ -15,7 +16,8 @@ function Navbar() {
 
   useEffect(() => {
     if (auth.status === "idle") dispatch(verifyUserThunk() as any);
-  }, []);
+    if (user) dispatch(getAllBookmarkThunk() as any);
+  }, [user]);
 
   return (
     <div className="flex items-center justify-between p-6 py-4 lg:px-12 sticky top-0 bg-transparent backdrop-blur-md font-secondary font-[500]">
@@ -36,6 +38,7 @@ function Navbar() {
           <>
             <CreateRouteDialog />
             <UserNavbarMenu />
+            <Bookmarks />
           </>
         ) : (
           <>
@@ -47,7 +50,6 @@ function Navbar() {
             </button>
           </>
         )}
-        <Bookmarks />
       </div>
     </div>
   );
