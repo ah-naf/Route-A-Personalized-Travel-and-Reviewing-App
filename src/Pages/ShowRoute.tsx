@@ -24,6 +24,7 @@ import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import ViewRouteNode from "../Nodes/ViewNode/ViewRouteNode";
 import { verifyUserThunk } from "../slices/AuthSlice";
 import { getSingleRouteThunk } from "../slices/RouteSlice";
+import { getAllBookmarkThunk } from "../slices/SearchSlice";
 import { RootState } from "../store";
 
 const nodeTypes = {
@@ -53,6 +54,7 @@ const MyFlow = () => {
 
   useEffect(() => {
     if (auth.status === "idle") dispatch(verifyUserThunk() as any);
+    if (auth.status === "success") dispatch(getAllBookmarkThunk() as any);
   }, [auth.status]);
 
   useEffect(() => {
@@ -69,7 +71,6 @@ const MyFlow = () => {
     }
   }, [currentRoute, setNodes, setEdges, setViewport]);
 
-  // TODO: Pore Backend tekhe data ana lagbe.
   useEffect(() => {
     dispatch(getSingleRouteThunk(paramId) as any);
   }, [paramId, render]);

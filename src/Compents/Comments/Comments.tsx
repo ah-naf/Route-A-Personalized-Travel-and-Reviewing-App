@@ -44,7 +44,7 @@ function Comments({ comments }: { comments: CommentType[] }) {
     <div className="mt-4">
       {comments.length > 0 ? (
         comments.map((cmnt) => (
-          <div key={cmnt.id} className="border-t py-3">
+          <div key={cmnt.id} className="border-t py-3 border-gray-300">
             <div className="flex items-center gap-2 ">
               <div className="w-12 h-10">
                 <BigHead {...cmnt.user?.avatar} />

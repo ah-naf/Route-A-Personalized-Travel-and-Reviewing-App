@@ -73,12 +73,17 @@ export const deleteAllBookmarkThunk = createAsyncThunk(
 const initialState: SearchSliceStateType = {
   routes: [],
   bookmarks: [],
+  render: false,
 };
 
 export const SearchSlice = createSlice({
   name: "SearchSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    setRenderSearchSlice: (state) => {
+      state.render = !state.render;
+    },
+  },
   extraReducers: {
     [getAllRouteThunk.fulfilled.type]: (state, { payload }) => {
       state.routes = payload.routes;
@@ -117,6 +122,6 @@ export const SearchSlice = createSlice({
   },
 });
 
-// export const {  } = SearchSlice.actions;
+export const { setRenderSearchSlice } = SearchSlice.actions;
 
 export default SearchSlice.reducer;

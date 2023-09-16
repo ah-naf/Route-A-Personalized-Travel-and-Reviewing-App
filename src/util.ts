@@ -131,6 +131,7 @@ export interface ProfileSliceStateType {
 export interface SearchSliceStateType {
   routes: RoutePostType[];
   bookmarks: BookmarkType[];
+  render: boolean
 }
 
 export const vehicles = [

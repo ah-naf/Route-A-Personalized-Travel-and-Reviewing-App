@@ -74,7 +74,12 @@ function SearchPage() {
                         </p>
                         <p className="tracking-wide text-sm mt-1 text-gray-800">
                           Added By:{" "}
-                          <span className="font-primary text-lg text-black font-medium hover:underline">
+                          <span
+                            className="font-primary text-black font-medium hover:underline cursor-pointer"
+                            onClick={() => {
+                              window.location.href = "/profile/" + val.user?.id;
+                            }}
+                          >
                             {val.user?.username}
                           </span>
                         </p>

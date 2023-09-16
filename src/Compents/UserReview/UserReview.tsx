@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { Bookmark, Chat, Heart2 } from "react-iconly";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   getCommentThunk,
   postCommentThunk,
   postOrDeleteLikeThunk,
 } from "../../slices/RouteSlice";
+import { addBookmarkThunk } from "../../slices/SearchSlice";
 import { RootState } from "../../store";
 import Comments from "../Comments/Comments";
 import {
@@ -28,14 +30,33 @@ function UserReview() {
   const user = useSelector((state: RootState) => state.auth.user);
   const comments = useSelector((state: RootState) => state.route.comments);
   const dispatch = useDispatch();
+  const bookmark = useSelector((state: RootState) => state.search.bookmarks);
+  const location = useLocation();
+  const paramId = location.pathname.split("/")[2];
+  const render = useSelector((state: RootState) => state.search.render);
+
+  useEffect(() => {
+    if (bookmark) {
+      let tmp = false;
+      bookmark.forEach((bm) => {
+        if (bm.routeId === paramId) tmp = tmp || true;
+      });
+      setBookmarked(tmp);
+    }
+  }, [bookmark, render]);
+
+  const handleBookmark = () => {
+    dispatch(addBookmarkThunk({ routeId: paramId }) as any);
+    setBookmarked(!bookmarked);
+  };
 
   useEffect(() => {
     if (activeRoute) {
+      let tmp = false;
       activeRoute.likes?.forEach((rt) => {
-        if (rt.userId === user?.id) {
-          setLiked(true);
-        } else setLiked(false);
+        if (rt.userId === user?.id) tmp = tmp || true;
       });
+      setLiked(tmp);
     }
   }, [activeRoute, user?.id]);
 
@@ -115,10 +136,7 @@ function UserReview() {
             </DialogContent>
           </Dialog>
         </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => setBookmarked(!bookmarked)}
-        >
+        <div className="cursor-pointer" onClick={handleBookmark}>
           <Bookmark
             set={`${bookmarked ? "bold" : "broken"}`}
             primaryColor={`${bookmarked ? "green" : "black"}`}
