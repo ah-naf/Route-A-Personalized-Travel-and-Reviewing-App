@@ -53,9 +53,25 @@ export const getAllBookmarkThunk = createAsyncThunk(
   }
 );
 
+export const deleteAllBookmarkThunk = createAsyncThunk(
+  "bookmark/deleteAllBookmark",
+  async () => {
+    const res = await fetch(`${URL}/bookmark`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      toast.error(data.msg);
+      return null;
+    }
+    toast.success(data.msg);
+    return data;
+  }
+);
+
 const initialState: SearchSliceStateType = {
   routes: [],
-  isBookmarked: [],
   bookmarks: [],
 };
 
@@ -88,6 +104,15 @@ export const SearchSlice = createSlice({
     },
     [getAllBookmarkThunk.fulfilled.type]: (state, { payload }) => {
       state.bookmarks = payload.bookmarks;
+    },
+    [deleteAllBookmarkThunk.fulfilled.type]: (state, { payload }) => {
+      state.bookmarks = [];
+      state.routes = state.routes.map((rt) => {
+        return {
+          ...rt,
+          bookmarks: rt.bookmarks.filter((bm) => bm.userId !== payload.userId),
+        };
+      });
     },
   },
 });

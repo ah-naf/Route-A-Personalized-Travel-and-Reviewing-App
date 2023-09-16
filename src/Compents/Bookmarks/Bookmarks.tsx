@@ -3,7 +3,7 @@ import { AiFillDelete, AiFillHeart } from "react-icons/ai";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { FaComment } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { addBookmarkThunk } from "../../slices/SearchSlice";
+import { addBookmarkThunk, deleteAllBookmarkThunk } from "../../slices/SearchSlice";
 import { RootState } from "../../store";
 import {
   Dialog,
@@ -20,6 +20,10 @@ function Bookmarks() {
   const handleBookmarkDelete = (routeId: string) => {
     dispatch(addBookmarkThunk({ routeId }) as any);
   };
+
+  const handleClearAll = () => {
+    dispatch(deleteAllBookmarkThunk() as any)
+  }
 
   return (
     <Dialog>
@@ -81,6 +85,9 @@ function Bookmarks() {
                 </div>
               </div>
             ))}
+            <div className="w-full text-center !mt-6">
+              <button className="border-2 p-1 px-6 hover:bg-orange-400 hover:border-orange-400 rounded font-medium hover:text-white border-gray-200 bg-gray-200" onClick={handleClearAll}>Clear All</button>
+            </div>
         </div>
       </DialogContent>
     </Dialog>

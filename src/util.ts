@@ -130,7 +130,6 @@ export interface ProfileSliceStateType {
 
 export interface SearchSliceStateType {
   routes: RoutePostType[];
-  isBookmarked: boolean[];
   bookmarks: BookmarkType[];
 }
 
