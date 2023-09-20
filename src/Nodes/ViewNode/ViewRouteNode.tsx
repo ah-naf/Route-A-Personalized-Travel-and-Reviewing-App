@@ -14,7 +14,6 @@ function ViewRouteNode() {
   const selectedNode = useTypedSelector(
     (state) => state.customNode.selectedNode
   );
-  console.log(selectedNode);
   const [modal_visible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [data, setData] = useState({

@@ -1,9 +1,10 @@
 import { Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Handle, Node, Position, useReactFlow } from "reactflow";
 import { setSelectedNode } from "../../slices/CustomNodeSlice";
+import { RootState } from "../../store";
 
 interface MousePos {
   mouseX: number;
@@ -11,7 +12,9 @@ interface MousePos {
 }
 
 function RouteNode({ id, data }) {
-  
+  const activeRoute = useSelector(
+    (state: RootState) => state.route.activeRoute
+  );
   let image = "/traveler.gif";
   const dataAche = Object.keys(data).length === 6;
   if (dataAche || data.place) {
@@ -23,8 +26,17 @@ function RouteNode({ id, data }) {
   const [contextMenu, setContextMenu] = useState<MousePos | null>(null);
 
   const handleClick = (mode: string) => {
+    if(!activeRoute) return null
     const { type } = rflow.getNode(id) as Node;
-    
+
+    dispatch(setSelectedNode({ id, data, type, editMode: mode === "edit" }));
+    setContextMenu(null);
+  };
+
+  const handleCtxClick = (mode: string) => {
+    // if(!activeRoute) return null
+    const { type } = rflow.getNode(id) as Node;
+
     dispatch(setSelectedNode({ id, data, type, editMode: mode === "edit" }));
     setContextMenu(null);
   };
@@ -38,6 +50,7 @@ function RouteNode({ id, data }) {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.preventDefault();
+    // if (activeRoute) return null;
     setContextMenu(
       contextMenu === null
         ? {
@@ -54,7 +67,7 @@ function RouteNode({ id, data }) {
 
   return (
     <div
-      // onClick={() => handleClick("view")}
+      onClick={() => handleClick("view")}
       onContextMenu={(e) => handleContextMenu(e)}
       className="cursor-context-menu"
     >
@@ -94,26 +107,28 @@ function RouteNode({ id, data }) {
           <div></div>
         )}
       </div>
-      <Menu
-        open={contextMenu !== null}
-        onClose={handleClose}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          contextMenu !== null
-            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-            : undefined
-        }
-      >
-        <MenuItem onClick={() => handleClick("edit")}>
-          <AiFillEdit /> <span className="ml-2">Edit</span>
-        </MenuItem>
-        <MenuItem onClick={() => handleClick("view")}>
-          <AiFillEye /> <span className="ml-2">View</span>
-        </MenuItem>
-        <MenuItem onClick={handleDelete} className="hover:text-red-600">
-          <AiFillDelete /> <span className="ml-2">Delete</span>
-        </MenuItem>
-      </Menu>
+      {!activeRoute && (
+        <Menu
+          open={contextMenu !== null}
+          onClose={handleClose}
+          anchorReference="anchorPosition"
+          anchorPosition={
+            contextMenu !== null
+              ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+              : undefined
+          }
+        >
+          <MenuItem onClick={() => handleCtxClick("edit")}>
+            <AiFillEdit /> <span className="ml-2">Edit</span>
+          </MenuItem>
+          <MenuItem onClick={() => handleCtxClick("view")}>
+            <AiFillEye /> <span className="ml-2">View</span>
+          </MenuItem>
+          <MenuItem onClick={handleDelete} className="hover:text-red-600">
+            <AiFillDelete /> <span className="ml-2">Delete</span>
+          </MenuItem>
+        </Menu>
+      )}
     </div>
   );
 }

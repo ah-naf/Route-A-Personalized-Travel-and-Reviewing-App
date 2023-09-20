@@ -7,9 +7,17 @@ import { postRouteThunk } from "../../slices/RouteSlice";
 import { RootState } from "../../store";
 import { FlowType, RoutePostType, calculateDate } from "../../util";
 
-function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId = "" }) {
+function CreateRouteTopbar({
+  reactFlowInstance,
+  type = "edit",
+  paramId = "",
+  tit = undefined,
+  mod = undefined,
+  updateAt = undefined,
+}) {
   const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("untitled");
+
   const dispatch = useDispatch();
   const lastUpdated = useSelector(
     (state: RootState) => state.customNode.lastUpdated
@@ -21,7 +29,14 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId = "" }) {
     (state: RootState) => state.route.activeRoute
   );
   const isLoading = useSelector((state: RootState) => state.route.loading);
-  const [mode, setMode] = useState("draft");
+  const [mode, setMode] = useState(mod ? "published" : "draft");
+
+  useEffect(() => {
+    if (updateAt) {
+      dispatch(setLastUpdatedTime(updateAt));
+      setTitle(tit);
+    }
+  }, [updateAt, tit]);
 
   useEffect(() => {
     if (type === "show" && activeRoute) {
@@ -68,13 +83,12 @@ function CreateRouteTopbar({ reactFlowInstance, type = "edit", paramId = "" }) {
           setMode("published");
           cost = handleRouteOption("cost", true) as number;
           time = handleRouteOption("time", true) as number;
-          toSave = {...toSave, cost, time}
+          toSave = { ...toSave, cost, time };
         }
-        
-        
+
         dispatch(postRouteThunk({ ...toSave }) as any);
         // TODO: Delete it after connecting to db
-        localStorage.setItem("current_flow", JSON.stringify({ ...flow }));
+        // localStorage.setItem("current_flow", JSON.stringify({ ...flow }));
       }
     },
     [reactFlowInstance, dispatch, title, user]

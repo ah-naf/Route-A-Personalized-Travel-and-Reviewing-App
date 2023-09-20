@@ -55,7 +55,7 @@ const ImageUpload = ({ setImages, defaultValue }) => {
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
-        // customRequest={}
+        customRequest={e => console.log(e)}
         className="w-full"
       >
         {fileList && fileList.length >= 8 ? null : uploadButton}

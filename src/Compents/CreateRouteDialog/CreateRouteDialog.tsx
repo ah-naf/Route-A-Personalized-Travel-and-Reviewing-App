@@ -16,31 +16,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 
-const DRAFT = [
-  {
-    id: "sdasff",
-    name: "untitled-1",
-    updatedAt: "20 aprit 2023",
-  },
-  {
-    id: "ssdasff",
-    name: "untitled-2",
-    updatedAt: "30 april 2023",
-  },
-];
 
-const PUBLISHED = [
-  {
-    id: "sdasff2",
-    name: "Cumilla to Chattogram",
-    publishedAt: "20 aprit 2023",
-  },
-  {
-    id: "ssdasff3",
-    name: "Chattogram to Cumilla",
-    publishedAt: "30 april 2023",
-  },
-];
 
 function CreateRouteDialog() {
   const navigate = useNavigate();
@@ -110,7 +86,7 @@ function CreateRouteDialog() {
                     >
                       <div
                         onClick={() => {
-                          window.location.href = "/route/" + val.id;
+                          window.location.href = "/create/" + val.id;
                         }}
                       >
                         <h3 className="font-medium ">{val.title}</h3>

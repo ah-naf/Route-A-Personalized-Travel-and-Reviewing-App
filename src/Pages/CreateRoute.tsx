@@ -26,6 +26,7 @@ import UpdateNode from "../Nodes/UpdateNode/UpdateNode";
 import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { verifyUserThunk } from "../slices/AuthSlice";
 import { RootState } from "../store";
+import { calculateDate } from "../util";
 
 const initialNodes = [
   {
@@ -63,6 +64,8 @@ const MyFlow = () => {
   const location = useLocation();
   const paramId = location.pathname.split("/")[2];
   const dispatch = useDispatch();
+  const [title, setTitle] = useState("");
+  const [updatedAt, setUpdatedAt] = useState("");
 
   useEffect(() => {
     if (auth.status === "idle") dispatch(verifyUserThunk() as any);
@@ -128,20 +131,29 @@ const MyFlow = () => {
 
   useEffect(() => {
     const restoreFlow = async () => {
-      const tempFlow = localStorage.getItem("current_flow");
-      if (tempFlow) {
-        const flow = JSON.parse(tempFlow);
-        if (flow) {
-          const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-          setNodes(flow.nodes || []);
-          setEdges(flow.edges || []);
-          setViewport({ x, y, zoom });
-        }
+      const res = await fetch(`http://localhost:5000/api/route/${paramId}`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      // console.log(data);
+      if (!data.route) {
+        setNodes(initialNodes);
+        setEdges([]);
+        setViewport({ x: 0, y: 0, zoom: 1 });
+        return;
       }
+      const flow = data.route.flow;
+      setTitle(data.route.title);
+      setUpdatedAt(calculateDate(data.route.updateAt));
+      console.log(data.route.title);
+      const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+      setNodes(flow.nodes || []);
+      setEdges(flow.edges || []);
+      setViewport({ x, y, zoom });
     };
 
     restoreFlow();
-  }, [setNodes, setEdges, setViewport]);
+  }, [setNodes, setEdges, setViewport, paramId]);
 
   return (
     <div className="w-full h-full flex relative" ref={reactFlowWrapper}>
@@ -162,6 +174,8 @@ const MyFlow = () => {
         <CreateRouteTopbar
           reactFlowInstance={reactFlowInstance}
           paramId={paramId}
+          tit={title}
+          updateAt={updatedAt}
         />
         <Background
           color="grey"

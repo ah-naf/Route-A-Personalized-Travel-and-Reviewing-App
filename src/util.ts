@@ -100,7 +100,7 @@ export interface RoutePostType {
   likes?: LikeType[];
   time?: number;
   cost?: number;
-  bookmarks: BookmarkType[];
+  bookmarks?: BookmarkType[];
 }
 
 // Auth Slice Initial State Type
