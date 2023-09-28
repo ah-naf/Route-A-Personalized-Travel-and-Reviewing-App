@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@vitejs/plugin-react": "^4.0.3",
     "antd": "^5.7.0",
+    "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.263.0",

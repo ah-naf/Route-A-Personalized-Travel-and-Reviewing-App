@@ -2,6 +2,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import type { RcFile, UploadProps } from "antd/es/upload";
 import type { UploadFile } from "antd/es/upload/interface";
+import axios from "axios";
+import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/lib/interface";
 import { useEffect, useState } from "react";
 
 const getBase64 = (file: RcFile): Promise<string> =>
@@ -17,10 +19,12 @@ const ImageUpload = ({ setImages, defaultValue }) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>(defaultValue);
+  const [progress, setProgress] = useState(0);
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     setImages(fileList && fileList.filter((val) => val.status === "done"));
-  }, [fileList]);
+  }, [fileList, setImages]);
 
   const handleCancel = () => setPreviewOpen(false);
 
@@ -28,7 +32,7 @@ const ImageUpload = ({ setImages, defaultValue }) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj as RcFile);
     }
-
+    console.log(file);
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
@@ -37,7 +41,6 @@ const ImageUpload = ({ setImages, defaultValue }) => {
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    console.log(newFileList);
     setFileList(newFileList);
   };
 
@@ -47,15 +50,43 @@ const ImageUpload = ({ setImages, defaultValue }) => {
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
+
+  const handleFileUpload = async (e: RcCustomRequestOptions) => {
+    const fmData = new FormData();
+    fmData.append("image", e.file);
+    try {
+      const res = await axios.post("http://localhost:5000/upload", fmData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (event) => {
+          if (!event.total || !e.onProgress) return;
+          const percent = Math.floor((event.loaded / event.total) * 100);
+          setProgress(percent);
+          if (percent === 100) {
+            setTimeout(() => setProgress(0), 1000);
+          }
+          e.onProgress({ percent: (event.loaded / event.total) * 100 });
+        },
+      });
+      // console.log(res.data.fileName);
+      setImage(`http://localhost:5000/upload/${res.data.filename}`);
+      if (e.onSuccess) e.onSuccess(res.data);
+    } catch (err) {
+      console.log("Eroor: ", err);
+      const error = new Error((err as Error).message);
+      if (e.onError) e.onError(error);
+    }
+  };
+
   return (
     <>
       <Upload
-        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
-        customRequest={e => console.log(e)}
+        customRequest={handleFileUpload}
         className="w-full"
       >
         {fileList && fileList.length >= 8 ? null : uploadButton}
