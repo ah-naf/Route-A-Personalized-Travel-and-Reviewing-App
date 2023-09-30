@@ -1,96 +1,96 @@
 import { BigHead } from "@bigheads/core";
-import { FiArrowUpRight } from "react-icons/fi";
+import { Card } from "@nextui-org/react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../Compents/Navbar/Navbar";
-import Search from "antd/es/input/Search";
-import { SearchIcon } from "lucide-react";
-
-const DISCOVER = [
-  {
-    id: "1",
-    image: "",
-    title: "Cumilla",
-    publishedAt: "19 April 2023",
-    username: "ahnaf",
-  },
-  {
-    id: "2",
-    image: "",
-    title: "Chattogram",
-    publishedAt: "19 April 2023",
-    username: "ahnaf",
-  },
-];
+import Rating from "../Compents/Rating/Rating";
+import SearchInput from "../Compents/SearchInput/SearchInput";
+import { getAllPlaceReviewThunk } from "../slices/ReviewSlice";
+import { RootState } from "../store";
 
 function Discover() {
+  const dispatch = useDispatch();
+  const { filtered_reviews } = useSelector((state: RootState) => state.review);
+
+  useEffect(() => {
+    dispatch(getAllPlaceReviewThunk() as any);
+  }, []);
+
   return (
     <div className="">
       <Navbar />
-      <div className="max-w-3xl mx-auto mt-10 grid">
+      <div className="max-w-4xl mx-auto mt-10 grid">
         <h1 className="text-center text-6xl text-blue-900 font-semibold tracking-wide">
           Discover new places
         </h1>
         <div className="flex place-content-center mt-8">
-          <input type="text" className="border p-2 rounded-l border-gray-400 focus:border-gray-600" placeholder="Input search text" />
-          <button className="p-2 bg-orange-400 rounded-r">
-            <SearchIcon className="h-5 w-5 text-white" />
-          </button>
+          <SearchInput />
         </div>
         <div className="mt-12 space-y-2">
-          {DISCOVER.map((place) => (
-            <div
-              key={place.id}
-              className="flex w-full items-center gap-4 border-t border-gray-400 py-5"
-            >
-              <div className="h-24 w-32">
-                <img
-                  src="login-bg.png"
-                  alt=""
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-              <div>
-                <h3 className="font-medium text-xl">{place.title}</h3>
-                <p className="text-xs text-gray-600">{place.publishedAt}</p>
-                <div className="flex items-center mt-1">
-                  <div className="w-8 h-8">
-                    <BigHead
-                      accessory="shades"
-                      body="breasts"
-                      circleColor="blue"
-                      clothing="vneck"
-                      clothingColor="green"
-                      eyebrows="leftLowered"
-                      eyes="leftTwitch"
-                      faceMask={false}
-                      faceMaskColor="blue"
-                      facialHair="none2"
-                      graphic="vue"
-                      hair="afro"
-                      hairColor="blonde"
-                      hat="turban"
-                      hatColor="red"
-                      lashes={false}
-                      lipColor="red"
-                      mask
-                      mouth="serious"
-                      skinTone="light"
-                    />
-                  </div>
-                  <p className="text-sm text-gray-700 font-medium cursor-pointer hover:underline">
-                    @{place.username}
-                  </p>
+          {filtered_reviews.length ? (
+            <div className="grid grid-cols-3 gap-4">
+              {filtered_reviews.map((place) => (
+                <div key={place.id} className="!h-[400px]">
+                  <Card
+                    isPressable
+                    onClick={() => {
+                      window.location.href = "/review/" + place.id;
+                    }}
+                  >
+                    <Card.Body>
+                      <Card.Image
+                        src={place.cover_pic}
+                        width="100%"
+                        objectFit="cover"
+                        height={"200px"}
+                      ></Card.Image>
+                    </Card.Body>
+                    <Card.Footer>
+                      <div>
+                        <h1 className="text-xl font-medium">{place.title}</h1>
+                        <div className="flex items-center gap-2">
+                          <Rating size="lg" disabled value={place.rating} />
+                          <span className="font-medium relative -top-1">
+                            ({place.rating})
+                          </span>
+                        </div>
+
+                        <div className="flex items-center">
+                          <p className="font-medium">Posted by: </p>
+                          <div className="w-10 h-10 relative -top-1.5">
+                            <BigHead {...place.user?.avatar} />
+                          </div>
+                          <p className="text-gray-700">
+                            @{place.user?.username}
+                          </p>
+                        </div>
+
+                        <div className="space-x-2 my-3">
+                          {place.tags.map((val, ind) => {
+                            if (ind < 3)
+                              return (
+                                <span className="bg-orange-400  text-white text-sm p-2 rounded">
+                                  {val}
+                                </span>
+                              );
+                          })}
+                          {place.tags.length > 3 && (
+                            <span className="font-medium text-xs">
+                              and more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Card.Footer>
+                  </Card>
                 </div>
-              </div>
-              <div className="ml-auto">
-                <button className="flex items-center text-gray-600 hover:underline hover:text-gray-900 font-medium">
-                  Read more{" "}
-                  <span className="ml-1">
-                    <FiArrowUpRight size="20" />
-                  </span>
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="grid place-content-center relative">
+              <img src="404.png" alt="" />
+            </div>
+          )}
         </div>
       </div>
     </div>

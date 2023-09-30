@@ -131,7 +131,33 @@ export interface ProfileSliceStateType {
 export interface SearchSliceStateType {
   routes: RoutePostType[];
   bookmarks: BookmarkType[];
-  render: boolean
+  render: boolean;
+}
+
+export type PlaceContentType = {
+  url: string;
+  type: string;
+};
+
+export interface PlaceReviewType {
+  id ?: string
+  desc: string;
+  cover_pic: string;
+  place: string;
+  rating: number;
+  contents: PlaceContentType[];
+  userId?: string;
+  tags: string[];
+  title: string;
+  user?: UserType;
+}
+
+export interface ReviewSliceStateType {
+  place_names: { value: string }[];
+  active_place: string;
+  reviews: PlaceReviewType[];
+  filtered_reviews: PlaceReviewType[];
+  search_by_place: boolean
 }
 
 export const vehicles = [

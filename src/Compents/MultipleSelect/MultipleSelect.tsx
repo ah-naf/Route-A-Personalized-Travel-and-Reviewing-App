@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 
-const MultipleSelect = ({ onValueChange, defaultValue }) => {
+const MultipleSelect = ({
+  onValueChange,
+  defaultValue,
+  background = "black",
+}) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -43,7 +47,7 @@ const MultipleSelect = ({ onValueChange, defaultValue }) => {
               <button
                 key={name}
                 onClick={() => handleItemDelete(name)}
-                className="px-2 py-1 flex items-center text-md text-white bg-black rounded"
+                className={`px-2 py-1 flex items-center text-md text-white bg-${background} rounded`}
               >
                 {name} <span className="ml-1">×</span>
               </button>

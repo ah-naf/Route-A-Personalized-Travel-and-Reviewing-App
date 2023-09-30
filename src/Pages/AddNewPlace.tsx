@@ -1,13 +1,17 @@
 import { UploadFile } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import ImageUpload from "../Compents/ImageUpload/ImageUpload";
+import MultipleSelect from "../Compents/MultipleSelect/MultipleSelect";
 import Navbar from "../Compents/Navbar/Navbar";
 import Rating from "../Compents/Rating/Rating";
 import ReactQuillEditor from "../Compents/ReactQuill/ReactQuillEditor";
 import SingleDropDown from "../Compents/SingleDropDown/SingleDropDown";
 import SingleImageUpload from "../Compents/SingleImageUpload/SingleImageUpload";
-
-const PLACE = ["Chittagong", "Dhaka", "Comilla"];
+import { addPlaceReviewThunk } from "../slices/ReviewSlice";
+import { RootState } from "../store";
+import { PlaceContentType, PlaceReviewType } from "../util";
 
 function AddNewPlace() {
   const [place, setPlace] = useState("");
@@ -16,17 +20,56 @@ function AddNewPlace() {
   const [rating, setRating] = useState(0);
   const [imageList, setImageList] = useState<UploadFile[]>([]);
   const [description, setDescription] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const dispatch = useDispatch();
+  const { place_names } = useSelector((state: RootState) => state.review);
+  const [PLACE, setPLACE] = useState<string[]>([]);
+
+  useEffect(() => {
+    setPLACE(place_names.map((val) => val.value));
+  }, [place_names]);
 
   const handleAdd = () => {
-    console.log({ place, coverPic, rating, imageList, description });
+    const contents: PlaceContentType[] = imageList.map((val) => ({
+      url: val.response as string,
+      type: val.type as string,
+    }));
+
+    if (!title || !place || !description || !rating || !coverPic) {
+      toast.error("Required field cant be empty");
+      return;
+    }
+    const payload: PlaceReviewType = {
+      title,
+      place: place.toLowerCase(),
+      desc: description,
+      rating,
+      contents,
+      cover_pic: coverPic,
+      tags,
+    };
+
+    dispatch(addPlaceReviewThunk(payload) as any);
   };
 
   return (
     <div>
       <Navbar />
+      <Toaster />
       <div className="max-w-xl mx-auto mt-12">
+        <div className="mb-4">
+          <p className="mb-1 font-medium text-lg">Title</p>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border border-gray-300 focus:border-gray-500 rounded shadow p-2"
+            placeholder="Enter Place Name"
+          />
+        </div>
         <div className="grid">
-          <label htmlFor="title" className="mb-2">
+          <label htmlFor="title" className="mb-2 font-medium text-lg">
             Place Name
           </label>
           {!addNew ? (
@@ -64,9 +107,9 @@ function AddNewPlace() {
               >
                 Place already exist
               </p>
-              <SingleImageUpload onValueChange={setCoverPic} />
             </>
           )}
+          <SingleImageUpload onValueChange={setCoverPic} />
         </div>
         <div className="mt-8">
           <p className="text-lg font-medium">Description</p>
@@ -80,11 +123,21 @@ function AddNewPlace() {
             />
           </div>
         </div>
+        <div className="mt-4">
+          <p className="font-medium text-lg">
+            Add Tag <span className="font-light text-xs">(optional)</span>{" "}
+          </p>
+          <MultipleSelect
+            onValueChange={(e: string[]) => setTags(e)}
+            defaultValue={[]}
+            background="orange-400"
+          />
+        </div>
         <div>
           <Rating onValueChange={setRating} />
         </div>
         <div className="mt-8 w-full">
-          <p className="tracking-wide mb-2 font-medium">Images/Video</p>
+          <p className="tracking-wide mb-2 text-lg font-medium">Images/Video</p>
           <div className="w-full">
             <ImageUpload
               setImages={(e: UploadFile[]) => setImageList(e)}
@@ -92,7 +145,7 @@ function AddNewPlace() {
             />
           </div>
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end mb-8">
           <button
             className="p-2 px-5 rounded text-white font-medium bg-orange-500 tracking-wide text-lg mt-8"
             onClick={handleAdd}

@@ -3,25 +3,25 @@ import { useEffect, useState } from "react";
 
 function SingleDropDown({
   columnNames,
-  onValueChange=undefined,
-  initValue='',
+  onValueChange = undefined,
+  initValue,
   disabled = false,
 }) {
-  const [value, setValue] = useState(initValue || "");
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     setValue(initValue || "");
   }, [initValue]);
 
   return (
-    <div >
+    <div>
       <Autocomplete
         disablePortal
         size="small"
-        value={value}
+        value={value || ""}
         disabled={disabled}
         onChange={(e, newValue) => {
-          setValue(newValue);
+          setValue(newValue as string);
           onValueChange(newValue);
         }}
         options={columnNames || []}
