@@ -13,6 +13,7 @@ import SearchPage from "./Pages/SearchPage";
 import ShowRoute from "./Pages/ShowRoute";
 import TempPage from "./Pages/TempPage";
 import { RootState } from "./store";
+import Review from "./Pages/Review";
 
 function App() {
   const auth = useSelector((state: RootState) => state.auth);
@@ -47,6 +48,7 @@ function App() {
       <Route path="/discover" element={<Discover />} />
       <Route path="/place/new" element={<AddNewPlace />} />
       <Route path="/place/:id" element={<Place />} />
+      <Route path="/review/:id" element={<Review />} />
     </Routes>
   );
 }

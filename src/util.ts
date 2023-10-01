@@ -158,6 +158,7 @@ export interface ReviewSliceStateType {
   reviews: PlaceReviewType[];
   filtered_reviews: PlaceReviewType[];
   search_by_place: boolean
+  active_review: PlaceReviewType | undefined
 }
 
 export const vehicles = [

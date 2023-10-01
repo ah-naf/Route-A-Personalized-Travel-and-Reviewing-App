@@ -53,12 +53,27 @@ export const getAllPlaceReviewThunk = createAsyncThunk(
   }
 );
 
+export const getSinglePlaceReviewThunk = createAsyncThunk(
+  "review/getSinglePlaceReview",
+  async (payload: string) => {
+    const res = await fetch(`${URL}/placeReview/${payload}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.msg);
+      return null;
+    }
+    return data.place;
+  }
+);
+
 const initialState: ReviewSliceStateType = {
   place_names: [],
   active_place: "",
   reviews: [],
   filtered_reviews: [],
   search_by_place: true,
+  active_review: undefined
 };
 
 export const ReviewSlice = createSlice({
@@ -99,6 +114,9 @@ export const ReviewSlice = createSlice({
     [getAllPlaceReviewThunk.fulfilled.type]: (state, { payload }) => {
       state.reviews = payload;
       state.filtered_reviews = payload;
+    },
+    [getSinglePlaceReviewThunk.fulfilled.type]: (state, { payload }) => {
+      state.active_review = payload
     },
   },
 });
