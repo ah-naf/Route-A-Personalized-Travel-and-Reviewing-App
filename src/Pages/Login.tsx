@@ -37,10 +37,10 @@ function Login() {
     <div className="min-h-screen flex flex-col">
       <Toaster />
       <Navbar />
-      <div className=" flex flex-grow">
-        <div className="bg-orange-400 basis-[60%] ">
-          <div className="rounded-r-3xl rounded-br-3xl bg-white h-full grid place-content-center">
-            <div className="min-w-[500px]">
+      <div className="flex flex-grow">
+        <div className="lg:bg-orange-400 basis-full lg:basis-[40%] xl:basis-[60%] ">
+          <div className="rounded-r-3xl rounded-br-3xl bg-white h-full grid place-content-center px-6">
+            <div className="min-w-full sm:min-w-[500px]">
               <h1 className="text-center font-medium tracking-wide text-4xl">
                 Welcome Back
               </h1>
@@ -100,7 +100,7 @@ function Login() {
             </div>
           </div>
         </div>
-        <div className="bg-orange-400 grid place-content-center basis-[40%]">
+        <div className="bg-orange-400 hidden lg:grid place-content-center basis-[60%] xl:basis-[40%]">
           <img src="/login-bg.gif" alt="" className="w-full min-h-[600px]" />
         </div>
       </div>

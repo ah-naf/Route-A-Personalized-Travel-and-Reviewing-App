@@ -4,7 +4,6 @@ import ReactDOM from "react-dom/client";
 import "react-quill/dist/quill.snow.css";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "reactflow/dist/style.css";
 import App from "./App.tsx";
@@ -16,8 +15,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <Provider store={store}>
       <BrowserRouter>
         <NextUIProvider>
-          
-          <App />
+          <div className="max-w-[90rem] mx-auto">
+            <App />
+          </div>
         </NextUIProvider>
       </BrowserRouter>
     </Provider>

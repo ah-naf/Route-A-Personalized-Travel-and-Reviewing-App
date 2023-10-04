@@ -29,7 +29,7 @@ function UserNavbarMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="w-12 h-12">
+        <div className="w-12 h-12 relative -top-1">
           <BigHead {...user?.avatar} />
         </div>
       </DropdownMenuTrigger>

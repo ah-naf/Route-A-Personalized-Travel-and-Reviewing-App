@@ -19,14 +19,14 @@ function Discover() {
   return (
     <div className="">
       <Navbar />
-      <div className="max-w-4xl mx-auto mt-10 grid">
+      <div className="max-w-4xl mx-auto my-10 grid">
         <h1 className="text-center text-6xl text-blue-900 font-semibold tracking-wide">
           Discover new places
         </h1>
         <div className="flex place-content-center mt-8">
           <SearchInput />
         </div>
-        <div className="mt-12 space-y-2">
+        <div className="my-12 space-y-2">
           {filtered_reviews.length ? (
             <div className="grid grid-cols-3 gap-4">
               {filtered_reviews.map((place) => (

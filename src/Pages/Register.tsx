@@ -57,10 +57,10 @@ function Register() {
     <div className="min-h-screen flex flex-col">
       <Toaster />
       <Navbar />
-      <div className=" flex flex-grow">
-        <div className=" basis-[50%] ">
-          <div className="rounded-r-3xl rounded-br-3xl bg-white h-full grid place-content-center">
-            <div className="min-w-[500px]">
+      <div className="flex flex-grow mb-4">
+        <div className="basis-full lg:basis-[50%] ">
+          <div className="rounded-r-3xl rounded-br-3xl bg-white h-full grid place-content-center px-6">
+            <div className="sm:min-w-[500px]">
               <h1 className="text-center font-medium tracking-wide text-4xl">
                 Create Account
               </h1>
@@ -167,7 +167,7 @@ function Register() {
             </div>
           </div>
         </div>
-        <div className="grid place-content-center basis-[50%]">
+        <div className="hidden lg:grid place-content-center basis-[50%]">
           <img src="/reg-bg.png" alt="" className="w-full min-h-[600px]" />
         </div>
       </div>

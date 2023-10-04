@@ -9,7 +9,8 @@ import Rating from "../Compents/Rating/Rating";
 import ReactQuillEditor from "../Compents/ReactQuill/ReactQuillEditor";
 import SingleDropDown from "../Compents/SingleDropDown/SingleDropDown";
 import SingleImageUpload from "../Compents/SingleImageUpload/SingleImageUpload";
-import { addPlaceReviewThunk } from "../slices/ReviewSlice";
+import { verifyUserThunk } from "../slices/AuthSlice";
+import { addPlaceReviewThunk, getPlaceNamesThunk } from "../slices/ReviewSlice";
 import { RootState } from "../store";
 import { PlaceContentType, PlaceReviewType } from "../util";
 
@@ -25,6 +26,15 @@ function AddNewPlace() {
   const dispatch = useDispatch();
   const { place_names } = useSelector((state: RootState) => state.review);
   const [PLACE, setPLACE] = useState<string[]>([]);
+  const auth = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (auth.status === "idle") {
+      dispatch(verifyUserThunk() as any);
+      dispatch(getPlaceNamesThunk() as any);
+    }
+    if (auth.status === "failed") window.location.href = "/";
+  }, [auth.status]);
 
   useEffect(() => {
     setPLACE(place_names.map((val) => val.value));
@@ -133,7 +143,7 @@ function AddNewPlace() {
             background="orange-400"
           />
         </div>
-        <div>
+        <div className="mt-4">
           <Rating onValueChange={setRating} />
         </div>
         <div className="mt-8 w-full">
