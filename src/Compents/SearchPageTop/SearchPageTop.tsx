@@ -1,79 +1,39 @@
 import { useEffect, useState } from "react";
 import { SeachContainer } from "../../Pages/HomePage";
+import Weather from "../Weather/Weather";
 
 function SearchPageTop() {
-  const [date, setDate] = useState({
+  const [date] = useState({
     day: new Date().toLocaleDateString("en-US", { weekday: "long" }),
     year: new Date().getFullYear(),
     date: new Date().getDate(),
     month: new Date().toLocaleDateString("en-US", { month: "long" }),
   });
 
-  const [weather, setWeather] = useState({
-    name: "",
-    temp: 0,
-    icon: "",
-  });
-
-  useEffect(() => {
-    const handleSuccess = async (position: GeolocationPosition) => {
-      const { latitude, longitude } = position.coords;
-      const url = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=a917b0cffb05a489e50e337d918c6a24`;
-      console.log(url);
-      const res = await fetch(url);
-      const data = await res.json();
-
-      setWeather({
-        name: data.name,
-        icon: data.weather[0].icon,
-        temp: data.main.temp,
-      });
-    };
-
-    const handleError = (error: GeolocationPositionError) => {
-      console.error("Error getting location:", error);
-    };
-
-    // Request current location
-    navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
-  }, []);
   return (
     <>
-      <div className=" my-8 flex items-center justify-between gap-8">
-        <div className="flex  items-start gap-2">
-          <h3 className="text-6xl font-primary text-gray-600 leading-10 font-medium">
-            {date.date}
-          </h3>
-          <div className="font-primary">
-            <h4 className="font-semibold tracking-wide">{date.day}</h4>
-            <p className="text-gray-600 leading-5 font-primary tracking-wider flex items-center gap-1">
-              <span>{date.month}</span>, <span>{date.year}</span>
-            </p>
+      <div className="my-10 flex flex-col lg:flex-row items-center justify-center gap-8 px-6">
+        <div className="grid place-items-center sm:grid-cols-2 sm:place-content-center w-full gap-8 sm:gap-4 lg:grid-cols-1">
+          <div className="flex items-start gap-2">
+            <h3 className="text-6xl font-primary text-gray-600 leading-10 font-medium">
+              {date.date}
+            </h3>
+            <div className="font-primary">
+              <h4 className="font-semibold tracking-wide">{date.day}</h4>
+              <p className="text-gray-600 leading-5 font-primary tracking-wider flex items-center gap-1">
+                <span>{date.month}</span>, <span>{date.year}</span>
+              </p>
+            </div>
+          </div>
+          <div className="hidden max-2xl:flex">
+            <Weather />
           </div>
         </div>
-        <div>
+        <div className="relative -top-8 lg:top-0 lg:min-w-[720px]">
           <SeachContainer page="search" />
         </div>
-        <div>
-          {weather.name && (
-            <div className="flex items-center ">
-              <img
-                src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-                alt=""
-              />
-              <h1 className=" text-5xl font-primary font-medium text-gray-600">
-                {(weather.temp - 273).toFixed(2)}
-              </h1>
-              <div className="ml-2">
-                <p className="font-primary tracking-wider font-medium text-lg">
-                  {weather.name}
-                </p>
-                <p className="font-primary tracking-wider leading-4 font-light">
-                  Bangladesh
-                </p>
-              </div>
-            </div>
-          )}
+        <div className="hidden 2xl:flex">
+          <Weather />
         </div>
       </div>
     </>
@@ -81,3 +41,5 @@ function SearchPageTop() {
 }
 
 export default SearchPageTop;
+
+

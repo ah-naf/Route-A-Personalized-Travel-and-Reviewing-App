@@ -52,11 +52,11 @@ function SearchPage() {
       <Navbar />
       <div className="max-w-7xl mx-auto">
         <SearchPageTop />
-        <div className="mt-16 ">
-          <p className="font-secondary text-2xl font-medium tracking-wide mb-4">
+        <div className="mb-8 px-8">
+          <p className="font-secondary text-3xl font-medium tracking-wide mb-4">
             Search Results
           </p>
-          <div className="grid grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-8">
             {routes.map((val, ind) => (
               <Card key={val.id} isHoverable>
                 <Card.Body>
