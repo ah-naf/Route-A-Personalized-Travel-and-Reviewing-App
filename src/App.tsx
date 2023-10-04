@@ -48,7 +48,6 @@ function App() {
       <Route path="/discover" element={<Discover />} />
       <Route path="/place/new" element={<AddNewPlace />} />
       <Route path="/place/:id" element={<Place />} />
-      <Route path="/review/:id" element={<Review />} />
     </Routes>
   );
 }
