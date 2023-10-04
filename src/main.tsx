@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <Provider store={store}>
       <BrowserRouter>
         <NextUIProvider>
-          <div className="max-w-[90rem] mx-auto">
+          <div className="max-w-[100rem] mx-auto">
             <App />
           </div>
         </NextUIProvider>

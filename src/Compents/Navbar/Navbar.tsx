@@ -20,7 +20,7 @@ function Navbar() {
   }, [user]);
 
   return (
-    <div className="flex items-center justify-between p-4  md:px-8 lg:px-12 sticky top-0 bg-transparent backdrop-blur-md font-secondary font-[500]">
+    <div className="flex items-center justify-between p-4 z-50 md:px-8 lg:px-12 sticky top-0 bg-transparent backdrop-blur-md font-secondary font-[500]">
       <Link to={"/"}>
         <h1 className="text-3xl tracking-wider cursor-pointer">
           <span className="text-orange-300">r</span>ou

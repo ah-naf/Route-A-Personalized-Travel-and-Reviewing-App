@@ -19,9 +19,9 @@ function SearchInput() {
   }, []);
 
   return (
-    <div className="space-x-4">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
       <Switch
-        className="bg-orange-400"
+        className="bg-orange-400 w-32"
         checked={search_by_place}
         onChange={(e) => {
           dispatch(setActivePlace(""));
@@ -33,7 +33,7 @@ function SearchInput() {
       />
       {search_by_place ? (
         <AutoComplete
-          style={{ width: 200 }}
+          // style={{ width: '100%' }}
           options={place_names}
           placeholder="Select a place"
           filterOption={(inputValue, option) =>
@@ -41,7 +41,7 @@ function SearchInput() {
           }
           allowClear={true}
           size="large"
-          className="!w-96"
+          className="w-[300px] sm:!w-[500px]"
           onChange={(e) => dispatch(setActivePlace(e))}
         />
       ) : (
@@ -49,7 +49,7 @@ function SearchInput() {
           type="text"
           value={active_place}
           onChange={(e) => dispatch(setActivePlace(e.target.value))}
-          className="w-[385px] border border-gray-300 focus:border-gray-500 rounded shadow p-2 py-1.5"
+          className="w-[300px] sm:w-[500px] border border-gray-300 focus:border-gray-500 rounded shadow p-2 py-1.5"
           placeholder="Search by tag"
         />
       )}
