@@ -19,22 +19,22 @@ function Discover() {
   return (
     <div className="">
       <Navbar />
-      <div className="max-w-4xl mx-auto my-10 grid px-4">
+      <div className="max-w-4xl 2xl:max-w-7xl mx-auto my-10 grid px-4">
         <h1 className="text-center text-4xl sm:text-5xl md:text-6xl text-blue-900 font-semibold tracking-wide">
           Discover new places
         </h1>
         <div className=" mt-8">
           <SearchInput />
         </div>
-        <div className="my-12 space-y-2">
+        <div className="my-12 space-y-4">
           {filtered_reviews.length ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
               {filtered_reviews.map((place) => (
                 <div key={place.id} className="!sm:h-[300px] !lg:h-[200px]">
                   <Card
                     isPressable
                     onClick={() => {
-                      window.location.href = "/review/" + place.id;
+                      window.location.href = "/place/" + place.id;
                     }}
                   >
                     <Card.Body>

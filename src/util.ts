@@ -140,7 +140,7 @@ export type PlaceContentType = {
 };
 
 export interface PlaceReviewType {
-  id ?: string
+  id?: string;
   desc: string;
   cover_pic: string;
   place: string;
@@ -148,6 +148,7 @@ export interface PlaceReviewType {
   contents: PlaceContentType[];
   userId?: string;
   tags: string[];
+  updatedAt?: string;
   title: string;
   user?: UserType;
 }
@@ -157,8 +158,8 @@ export interface ReviewSliceStateType {
   active_place: string;
   reviews: PlaceReviewType[];
   filtered_reviews: PlaceReviewType[];
-  search_by_place: boolean
-  active_review: PlaceReviewType | undefined
+  search_by_place: boolean;
+  active_review: PlaceReviewType | undefined;
 }
 
 export const vehicles = [
