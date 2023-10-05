@@ -2,6 +2,7 @@ import { UploadFile } from "antd";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import ImageUpload from "../Compents/ImageUpload/ImageUpload";
 import MultipleSelect from "../Compents/MultipleSelect/MultipleSelect";
 import Navbar from "../Compents/Navbar/Navbar";
@@ -10,9 +11,14 @@ import ReactQuillEditor from "../Compents/ReactQuill/ReactQuillEditor";
 import SingleDropDown from "../Compents/SingleDropDown/SingleDropDown";
 import SingleImageUpload from "../Compents/SingleImageUpload/SingleImageUpload";
 import { verifyUserThunk } from "../slices/AuthSlice";
-import { addPlaceReviewThunk, getPlaceNamesThunk } from "../slices/ReviewSlice";
+import {
+  addPlaceReviewThunk,
+  editPlaceReviewThunk,
+  getPlaceNamesThunk,
+  getSinglePlaceReviewThunk,
+} from "../slices/ReviewSlice";
 import { RootState } from "../store";
-import { PlaceContentType, PlaceReviewType } from "../util";
+import { PlaceReviewType } from "../util";
 
 function AddNewPlace() {
   const [place, setPlace] = useState("");
@@ -24,16 +30,37 @@ function AddNewPlace() {
   const [tags, setTags] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
-  const { place_names } = useSelector((state: RootState) => state.review);
+  const { place_names, active_review } = useSelector(
+    (state: RootState) => state.review
+  );
   const [PLACE, setPLACE] = useState<string[]>([]);
   const auth = useSelector((state: RootState) => state.auth);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (active_review) {
+      setPlace(active_review.place);
+      setCoverPic(active_review.cover_pic);
+      setRating(active_review.rating);
+      // console.log(active_review.contents);
+      setImageList(active_review.contents);
+      setDescription(active_review.desc);
+      setTags(active_review.tags);
+      setTitle(active_review.title);
+    }
+  }, [active_review]);
+
+  useEffect(() => {
+    const params = searchParams.get("routeid");
+    if (params) dispatch(getSinglePlaceReviewThunk(params) as any);
+  }, [searchParams]);
 
   useEffect(() => {
     if (auth.status === "idle") {
       dispatch(verifyUserThunk() as any);
-      dispatch(getPlaceNamesThunk() as any);
     }
     if (auth.status === "failed") window.location.href = "/";
+    dispatch(getPlaceNamesThunk() as any);
   }, [auth.status]);
 
   useEffect(() => {
@@ -41,11 +68,6 @@ function AddNewPlace() {
   }, [place_names]);
 
   const handleAdd = () => {
-    const contents: PlaceContentType[] = imageList.map((val) => ({
-      url: val.response as string,
-      type: val.type as string,
-    }));
-
     if (!title || !place || !description || !rating || !coverPic) {
       toast.error("Required field cant be empty");
       return;
@@ -55,12 +77,20 @@ function AddNewPlace() {
       place: place.toLowerCase(),
       desc: description,
       rating,
-      contents,
+      contents: imageList,
       cover_pic: coverPic,
       tags,
     };
 
-    dispatch(addPlaceReviewThunk(payload) as any);
+    if (searchParams.get("routeid")) {
+      dispatch(
+        editPlaceReviewThunk({
+          ...payload,
+          id: searchParams.get("routeid") as string,
+          userId: auth.user?.id
+        }) as any
+      );
+    } else dispatch(addPlaceReviewThunk(payload) as any);
   };
 
   return (
@@ -119,7 +149,7 @@ function AddNewPlace() {
               </p>
             </>
           )}
-          <SingleImageUpload onValueChange={setCoverPic} />
+          <SingleImageUpload onValueChange={setCoverPic} initValue={coverPic} />
         </div>
         <div className="mt-8">
           <p className="text-lg font-medium">Description</p>
@@ -139,12 +169,12 @@ function AddNewPlace() {
           </p>
           <MultipleSelect
             onValueChange={(e: string[]) => setTags(e)}
-            defaultValue={[]}
+            defaultValue={tags}
             background="orange-400"
           />
         </div>
         <div className="mt-4">
-          <Rating onValueChange={setRating} />
+          <Rating onValueChange={setRating} value={rating} />
         </div>
         <div className="mt-8 w-full">
           <p className="tracking-wide mb-2 text-lg font-medium">Images/Video</p>
@@ -160,7 +190,7 @@ function AddNewPlace() {
             className="p-2 px-5 rounded text-white font-medium bg-orange-500 tracking-wide text-lg mt-8"
             onClick={handleAdd}
           >
-            Add Place
+            {searchParams.get("routeid") ? "Update" : "Add"} Place
           </button>
         </div>
       </div>

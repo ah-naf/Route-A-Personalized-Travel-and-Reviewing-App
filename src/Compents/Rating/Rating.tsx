@@ -6,7 +6,7 @@ const Rating = ({
   onValueChange,
   size = "3xl",
   disabled = false,
-  value=3
+  value = 3,
 }) => {
   const customIcons: Record<number, React.ReactNode> = {
     1: <FrownOutlined className={`text-${size}`} />,
@@ -20,7 +20,7 @@ const Rating = ({
     <div className=" flex items-center">
       {!disabled && <h1 className="mr-4 font-medium text-lg">Rating: </h1>}
       <Rate
-        defaultValue={value}
+        value={value}
         allowClear
         allowHalf
         disabled={disabled}

@@ -130,19 +130,21 @@ function ProfileLeft() {
         <div className="bg-white p-3 rounded-lg pb-5 shadow">
           <h1 className="text-2xl font-medium mb-3">Information</h1>
           <div className="grid gap-2">
-            <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text- tracking-wide gap-2">
-                <CgWebsite />
-                Website
-              </span>
-              {loading ? (
-                <Skeleton variant="text" className="ml-auto" width={100} />
-              ) : (
-                <span className="ml-auto text-black text-sm  font-medium">
-                  {profileUser?.url}
+            {profileUser?.url && (
+              <p className="flex items-center text-lg text-gray-500">
+                <span className="flex items-center font-primary text- tracking-wide gap-2">
+                  <CgWebsite />
+                  Website
                 </span>
-              )}
-            </p>
+                {loading ? (
+                  <Skeleton variant="text" className="ml-auto" width={100} />
+                ) : (
+                  <span className="ml-auto text-black text-sm  font-medium">
+                    {profileUser?.url}
+                  </span>
+                )}
+              </p>
+            )}
             <p className="flex items-center text-lg text-gray-500">
               <span className="flex items-center font-primary text-  gap-2">
                 <HiOutlineMail />
@@ -156,19 +158,21 @@ function ProfileLeft() {
                 </span>
               )}
             </p>
-            <p className="flex items-center text-lg text-gray-500">
-              <span className="flex items-center font-primary text- gap-2">
-                <BsTelephone />
-                Phone
-              </span>
-              {loading ? (
-                <Skeleton variant="text" className="ml-auto" width={100} />
-              ) : (
-                <span className="ml-auto text-black  tracking-wide text-sm  font-medium">
-                  {profileUser?.phone}
+            {profileUser?.phone && (
+              <p className="flex items-center text-lg text-gray-500">
+                <span className="flex items-center font-primary text- gap-2">
+                  <BsTelephone />
+                  Phone
                 </span>
-              )}
-            </p>
+                {loading ? (
+                  <Skeleton variant="text" className="ml-auto" width={100} />
+                ) : (
+                  <span className="ml-auto text-black  tracking-wide text-sm  font-medium">
+                    {profileUser?.phone}
+                  </span>
+                )}
+              </p>
+            )}
             <p className="flex items-center text-lg text-gray-500">
               <span className="flex items-center font-primary text- gap-2">
                 <AiOutlineCalendar />

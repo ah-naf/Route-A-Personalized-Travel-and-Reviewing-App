@@ -3,7 +3,11 @@ import { AiFillDelete, AiFillHeart } from "react-icons/ai";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { FaComment } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { addBookmarkThunk, deleteAllBookmarkThunk, setRenderSearchSlice } from "../../slices/SearchSlice";
+import {
+  addBookmarkThunk,
+  deleteAllBookmarkThunk,
+  setRenderSearchSlice,
+} from "../../slices/SearchSlice";
 import { RootState } from "../../store";
 import {
   Dialog,
@@ -19,13 +23,13 @@ function Bookmarks() {
 
   const handleBookmarkDelete = (routeId: string) => {
     dispatch(addBookmarkThunk({ routeId }) as any);
-    dispatch(setRenderSearchSlice())
+    dispatch(setRenderSearchSlice());
   };
 
   const handleClearAll = () => {
-    dispatch(deleteAllBookmarkThunk() as any)
-    dispatch(setRenderSearchSlice())
-  }
+    dispatch(deleteAllBookmarkThunk() as any);
+    dispatch(setRenderSearchSlice());
+  };
 
   return (
     <Dialog>
@@ -47,9 +51,9 @@ function Bookmarks() {
         <DialogHeader>
           <DialogTitle className="text-xl">Bookmarked Routes</DialogTitle>
         </DialogHeader>
-        <div className="mt-2 mb-2 space-y-3">
-          {bookmarks &&
-            bookmarks.map((rt, ind) => (
+        {bookmarks && bookmarks.length ? (
+          <div className="mt-2 mb-2 space-y-3">
+            {bookmarks.map((rt, ind) => (
               <div
                 key={rt.id}
                 className="flex items-center bg-gray-100 p-2  rounded group hover:bg-orange-400 transition cursor-pointer"
@@ -88,9 +92,19 @@ function Bookmarks() {
               </div>
             ))}
             <div className="w-full text-center !mt-6">
-              <button className="border-2 p-1 px-6 hover:bg-orange-400 hover:border-orange-400 rounded font-medium hover:text-white border-gray-200 bg-gray-200" onClick={handleClearAll}>Clear All</button>
+              <button
+                className="border-2 p-1 px-6 hover:bg-orange-400 hover:border-orange-400 rounded font-medium hover:text-white border-gray-200 bg-gray-200"
+                onClick={handleClearAll}
+              >
+                Clear All
+              </button>
             </div>
-        </div>
+          </div>
+        ) : (
+          <div className="text-center my-4">
+            <h3 className="font-medium text-gray-700">Bookmark list is empty</h3>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

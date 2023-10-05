@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../store";
 import UserActivity from "../UserActivity/UserActivity";
+import UserPlaceReviews from "../UserPlaceReviews/UserPlaceReviews";
 import UserRoutes from "../UserRoutes/UserRoutes";
 import UserSetting from "../UserSetting/UserSetting";
 
@@ -15,7 +16,11 @@ function ProfileRight() {
   );
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search).get("tab");
-  const [options, setOptions] = useState(["User Routes", "Settings"]);
+  const [options, setOptions] = useState([
+    "User Routes",
+    "Place Reviews",
+    "Settings",
+  ]);
 
   useEffect(() => {
     if (queryParams === "setting") setOption("Settings");
@@ -48,6 +53,7 @@ function ProfileRight() {
       <div className="mt-2 flex-1 ">
         {option === "User Routes" && <UserRoutes />}
         {option === "Activity" && <UserActivity />}
+        {option === "Place Reviews" && <UserPlaceReviews />}
         {option === "Settings" && <UserSetting />}
       </div>
     </div>

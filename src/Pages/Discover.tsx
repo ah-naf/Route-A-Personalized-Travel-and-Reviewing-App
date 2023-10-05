@@ -65,7 +65,7 @@ function Discover() {
                           </p>
                         </div>
 
-                        <div className="space-x-2 mt-6 mb-3">
+                        <div className="space-x-2 mt-4 mb-3">
                           {place.tags.map((val, ind) => {
                             if (ind < 3)
                               return (

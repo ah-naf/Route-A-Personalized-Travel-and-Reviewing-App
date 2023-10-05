@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { SeachContainer } from "../../Pages/HomePage";
+import { useState } from "react";
+import SeachContainer from "../SearchContainer/SearchContainer";
 import Weather from "../Weather/Weather";
 
 function SearchPageTop() {
@@ -30,7 +30,7 @@ function SearchPageTop() {
           </div>
         </div>
         <div className="relative -top-8 lg:top-0 lg:min-w-[720px]">
-          <SeachContainer page="search" />
+          <SeachContainer />
         </div>
         <div className="hidden 2xl:flex">
           <Weather />
@@ -41,5 +41,3 @@ function SearchPageTop() {
 }
 
 export default SearchPageTop;
-
-

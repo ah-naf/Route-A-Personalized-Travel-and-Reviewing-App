@@ -9,8 +9,9 @@ const MultipleSelect = ({
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   useEffect(() => {
+    // console.log(defaultValue)
     setSelectedItems(defaultValue);
-  }, []);
+  }, [defaultValue]);
 
   const handleItemDelete = (name: string) => {
     const updatedItems = selectedItems.filter(

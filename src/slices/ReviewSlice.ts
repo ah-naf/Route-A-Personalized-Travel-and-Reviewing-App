@@ -7,21 +7,21 @@ const URL = "http://localhost:5000/api";
 export const addPlaceReviewThunk = createAsyncThunk(
   "review/addPlaceReview",
   async (payload: PlaceReviewType) => {
-    const res = await fetch(`${URL}/placeReview`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(`${URL}/placeReview`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
 
-    if (!res.ok) {
-      toast.error(data.msg);
-      return null;
+      toast.success(data.msg);
+    } catch (error) {
+      toast.error("An unknown error occured. Please check the input fields");
     }
-    toast.success(data.msg);
   }
 );
 
@@ -36,6 +36,23 @@ export const getPlaceNamesThunk = createAsyncThunk(
       return null;
     }
     return data.place_names;
+  }
+);
+
+export const deletePlaceReviewThunk = createAsyncThunk(
+  "review/deletePlaceReview",
+  async (payload: string) => {
+    const res = await fetch(`${URL}/placeReview/${payload}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.msg);
+      return null;
+    }
+    // return data.place_names;
   }
 );
 
@@ -67,13 +84,34 @@ export const getSinglePlaceReviewThunk = createAsyncThunk(
   }
 );
 
+export const editPlaceReviewThunk = createAsyncThunk(
+  "review/editPlaceReview",
+  async (payload: PlaceReviewType) => {
+    const res = await fetch(`${URL}/placeReview/${payload.id}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.msg);
+      return null;
+    }
+    toast.success(data.msg);
+  }
+);
+
 const initialState: ReviewSliceStateType = {
   place_names: [],
   active_place: "",
   reviews: [],
   filtered_reviews: [],
   search_by_place: true,
-  active_review: undefined
+  active_review: undefined,
 };
 
 export const ReviewSlice = createSlice({
@@ -116,7 +154,7 @@ export const ReviewSlice = createSlice({
       state.filtered_reviews = payload;
     },
     [getSinglePlaceReviewThunk.fulfilled.type]: (state, { payload }) => {
-      state.active_review = payload
+      state.active_review = payload;
     },
   },
 });

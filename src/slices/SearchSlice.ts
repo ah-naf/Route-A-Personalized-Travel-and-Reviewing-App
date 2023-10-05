@@ -6,8 +6,16 @@ const URL = "http://localhost:5000/api";
 
 export const getAllRouteThunk = createAsyncThunk(
   "search/getAllRoute",
-  async () => {
-    const res = await fetch(`${URL}/search/`);
+  async ({
+    source,
+    destination,
+  }: {
+    source: null | undefined | string;
+    destination: null | undefined | string;
+  }) => {
+    const res = await fetch(
+      `${URL}/search?source=${source}&&destination=${destination}`
+    );
     const data = await res.json();
     return data;
   }
@@ -92,7 +100,7 @@ export const SearchSlice = createSlice({
       state.bookmarks = payload.bookmarks;
       if (payload.type === "create") {
         state.routes = state.routes.map((rt) => {
-          if (rt.id === payload.bookmark.routeId) {
+          if (rt.id === payload.bookmark.routeId && rt.bookmarks) {
             return { ...rt, bookmarks: [...rt.bookmarks, payload.bookmark] };
           }
           return rt;
@@ -115,7 +123,7 @@ export const SearchSlice = createSlice({
       state.routes = state.routes.map((rt) => {
         return {
           ...rt,
-          bookmarks: rt.bookmarks.filter((bm) => bm.userId !== payload.userId),
+          bookmarks: rt.bookmarks?.filter((bm) => bm.userId !== payload.userId),
         };
       });
     },

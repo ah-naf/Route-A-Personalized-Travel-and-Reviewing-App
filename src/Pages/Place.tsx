@@ -1,37 +1,14 @@
 import { BigHead } from "@bigheads/core";
 import { useEffect, useState } from "react";
+import { AiFillEdit } from "react-icons/ai";
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../Compents/Navbar/Navbar";
 import Rating from "../Compents/Rating/Rating";
 import { getSinglePlaceReviewThunk } from "../slices/ReviewSlice";
 import { RootState } from "../store";
 import { calculateDate } from "../util";
-
-const DISCOVER = [
-  {
-    id: "1",
-    image: "",
-    title: "Cumilla",
-    publishedAt: "19 April 2023",
-    username: "ahnaf",
-  },
-  {
-    id: "2",
-    image: "",
-    title: "Chattogram",
-    publishedAt: "19 April 2023",
-    username: "ahnaf",
-  },
-  {
-    id: "3",
-    image: "",
-    title: "Chattogram",
-    publishedAt: "19 April 2023",
-    username: "ahnaf",
-  },
-];
 
 function Place() {
   const dispatch = useDispatch();
@@ -41,6 +18,8 @@ function Place() {
     (state: RootState) => state.review
   );
   const [index, setIndex] = useState(0);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getSinglePlaceReviewThunk(paramId) as any);
@@ -57,14 +36,14 @@ function Place() {
             <div className="w-full">
               {review.contents[index].type === "video/mp4" ? (
                 <video
-                  src={review.contents[index].url}
+                  src={review.contents[index].response}
                   className=" mx-auto"
                   controls
                   autoPlay={true}
                   loop
                 ></video>
               ) : (
-                <img src={review.contents[index].url} className="" />
+                <img src={review.contents[index].response} className="" />
               )}
               <div className="flex items-center justify-center gap-2 mt-2">
                 <button
@@ -104,8 +83,20 @@ function Place() {
                   <BigHead {...review.user?.avatar} />
                 </div>
                 <div>
-                  <p className="font-medium text-blue-950">
-                    {review.user?.name}
+                  <p className="font-medium text-blue-950 flex items-center gap-2">
+                    {review.user?.name}{" "}
+                    {user && user.id === review.userId && (
+                      <span
+                        className="cursor-pointer"
+                        onClick={() =>
+                          navigate(
+                            `/place/new?routeid=${review.id}`
+                          )
+                        }
+                      >
+                        <AiFillEdit />
+                      </span>
+                    )}
                   </p>
                   <p className="text-xs text-gray-600">
                     {calculateDate(review.updatedAt)}

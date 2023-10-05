@@ -2,10 +2,17 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import axios from "axios";
 import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/lib/interface";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const SingleImageUpload: React.FC = ({ onValueChange }) => {
+const SingleImageUpload = ({ onValueChange, initValue = "" }) => {
   const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (initValue) {
+      setImage(initValue);
+    }
+  }, [initValue]);
+
   const handleUpload = async (e: RcCustomRequestOptions) => {
     const fmData = new FormData();
     fmData.append("image", e.file);

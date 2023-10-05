@@ -145,7 +145,7 @@ export interface PlaceReviewType {
   cover_pic: string;
   place: string;
   rating: number;
-  contents: PlaceContentType[];
+  contents: UploadFile[];
   userId?: string;
   tags: string[];
   updatedAt?: string;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../Compents/Navbar/Navbar";
 import SearchPageTop from "../Compents/SearchPageTop/SearchPageTop";
 import { addBookmarkThunk, getAllRouteThunk } from "../slices/SearchSlice";
@@ -18,6 +19,15 @@ function SearchPage() {
   const routes = useSelector((state: RootState) => state.search.routes);
   const [isBookmarked, setIsBookmarked] = useState<IsBookmarkedType>({});
   const user = useSelector((state: RootState) => state.auth.user);
+  const [searchParams] = useSearchParams();
+  const [source, setSource] = useState<null | undefined | string>();
+  const [destination, setDestination] = useState<null | undefined | string>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setSource(searchParams.get("source"));
+    setDestination(searchParams.get("destination"));
+  }, [searchParams]);
 
   useEffect(() => {
     routes.forEach((rt) => {
@@ -35,8 +45,8 @@ function SearchPage() {
   }, [routes]);
 
   useEffect(() => {
-    dispatch(getAllRouteThunk() as any);
-  }, []);
+    dispatch(getAllRouteThunk({ source, destination }) as any);
+  }, [source, destination]);
 
   const handleBookmark = (routeId: string) => {
     if (!user) {
@@ -54,10 +64,18 @@ function SearchPage() {
         <SearchPageTop />
         <div className="mb-8 px-8">
           <p className="font-secondary text-3xl font-medium tracking-wide mb-4">
-            Search Results
+            Search Results{" "}
+            {source && destination && (
+              <span
+                className="text-xs font-light text-red-500 cursor-pointer hover:underline"
+                onClick={() => navigate("/search")}
+              >
+                reset
+              </span>
+            )}
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-8">
-            {routes.map((val, ind) => (
+            {routes.map((val) => (
               <Card key={val.id} isHoverable>
                 <Card.Body>
                   <div className="p-2">

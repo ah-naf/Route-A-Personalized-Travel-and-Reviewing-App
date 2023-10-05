@@ -19,7 +19,7 @@ function ReactQuillEditor({
 
   useEffect(() => {
     if (defaultValue) setValue(defaultValue);
-  }, []);
+  }, [defaultValue]);
 
   const modules = {
     toolbar: [

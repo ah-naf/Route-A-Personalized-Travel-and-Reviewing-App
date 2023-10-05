@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
+    console.log(file);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result as string);
@@ -21,19 +22,30 @@ const ImageUpload = ({ setImages, defaultValue }) => {
   const [fileList, setFileList] = useState<UploadFile[]>(defaultValue);
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState("");
+  const [render, setRender] = useState(true);
 
+  // console.log(defaultValue)
   useEffect(() => {
     setImages(fileList && fileList.filter((val) => val.status === "done"));
-  }, [fileList, setImages]);
+  }, [fileList]);
+
+  useEffect(() => {
+    if (defaultValue && render && defaultValue.length) {
+      // console.log(defaultValue);
+      setFileList(defaultValue);
+      setRender(false);
+    }
+  }, [defaultValue, render]);
 
   const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
+    if (!file.response && !file.preview) {
+      // console.log(file)
       file.preview = await getBase64(file.originFileObj as RcFile);
     }
-    console.log(file);
-    setPreviewImage(file.url || (file.preview as string));
+    // console.log(file.response);
+    setPreviewImage(file.response || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
       file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
