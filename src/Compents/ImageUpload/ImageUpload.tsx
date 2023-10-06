@@ -107,6 +107,7 @@ const ImageUpload = ({ setImages, defaultValue }) => {
         open={previewOpen}
         title={previewTitle}
         footer={null}
+        className="!z-[10000000]"
         onCancel={handleCancel}
       >
         <img alt="example" style={{ width: "100%" }} src={previewImage} />

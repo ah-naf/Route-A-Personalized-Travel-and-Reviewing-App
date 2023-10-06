@@ -26,9 +26,6 @@ export interface RouteNodeData {
   image: string;
   desc: string;
   tourist_spot: boolean;
-  tourist_spot_desc: string;
-  tourist_spot_title: string;
-  tourist_spot_images: UploadFile[] | null;
 }
 
 // Custom Node Slice Initial State Type

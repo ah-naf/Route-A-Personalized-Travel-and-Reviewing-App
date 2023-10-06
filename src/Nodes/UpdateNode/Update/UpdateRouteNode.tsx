@@ -27,17 +27,18 @@ function UpdateRouteNode() {
     image: "",
     desc: "",
     tourist_spot: false,
-    tourist_spot_desc: "",
-    tourist_spot_title: "",
-    tourist_spot_images: [],
   });
+  const [imageList, setImageList] = useState<UploadFile[]>([]);
 
   useEffect(() => {
     setModalVisible(Object.keys(selectedNode).length > 0);
-    if (selectedNode.data) {
-      setData(selectedNode.data as RouteNodeData);
+    const id = selectedNode.id;
+    const nodeDetails = rflow.getNode(id)?.data;
+    if (nodeDetails) {
+      setData(nodeDetails as RouteNodeData);
+      setImageList(nodeDetails.imageList);
     }
-  }, [selectedNode]);
+  }, [selectedNode, rflow]);
 
   const closeHandler = () => {
     dispatch(setSelectedNode({}));
@@ -67,7 +68,7 @@ function UpdateRouteNode() {
             desc: data.desc,
             image: data.image,
             tourist_spot: data.tourist_spot,
-            tourist_spot_desc: data.tourist_spot_desc,
+            imageList,
           },
         };
       }
@@ -101,7 +102,7 @@ function UpdateRouteNode() {
           theme="colored"
         />
         <Modal.Header>
-          <h1 className="text-4xl font-semibold font-primary tracking-wider">
+          <h1 className="text-2xl font-semibold font-primary tracking-wider">
             Update route data
           </h1>
         </Modal.Header>
@@ -166,43 +167,10 @@ function UpdateRouteNode() {
             >
               It is a tourist spot
             </Checkbox>
-            {data.tourist_spot && (
-              <div className="space-y-4">
-                <div>
-                  <p className="tracking-wide mb-1">Tourist spot title</p>
-                  <input
-                    type="text"
-                    placeholder="Cox's Bazar - The Longest Sea Beach"
-                    className="border-2 p-2 rounded outline-none border-gray-300 focus:border-gray-700 w-full"
-                    // value={data.image}
-                    // onChange={(e) =>
-                    //   setData({ ...data, image: e.target.value })
-                    // }
-                  />
-                </div>
-                <div className="grid">
-                  <p className="tracking-wide mb-2">Tourist spot description</p>
-                  <ReactQuillEditor
-                    placeholder="Write something informational about this tourist spot"
-                    defaultValue={data.tourist_spot}
-                    onValueChange={(e: string) =>
-                      setData({ ...data, tourist_spot_desc: e })
-                    }
-                  />
-                </div>
-                <div>
-                  <p className="tracking-wide mb-2">Images</p>
-                  <div className="w-full">
-                    <ImageUpload
-                      setImages={(e: UploadFile[]) =>
-                        setData({ ...data, tourist_spot_images: e })
-                      }
-                      defaultValue={data.tourist_spot_images}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+            <div>
+              <p className="mb-1">Video/Images</p>
+              <ImageUpload defaultValue={imageList} setImages={setImageList} />
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>

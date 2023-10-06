@@ -1,4 +1,5 @@
 import { Menu, MenuItem } from "@mui/material";
+import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { AiFillDelete, AiFillEdit, AiFillEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,13 +24,14 @@ function RouteNode({ id, data }) {
   }
   const rflow = useReactFlow();
   const dispatch = useDispatch();
+  const isItTravelSpot = data.tourist_spot;
   const [contextMenu, setContextMenu] = useState<MousePos | null>(null);
 
   const handleClick = (mode: string) => {
-    if(!activeRoute) return null
+    if (!activeRoute) return null;
     const { type } = rflow.getNode(id) as Node;
 
-    dispatch(setSelectedNode({ id, data, type, editMode: mode === "edit" }));
+    dispatch(setSelectedNode({ id, type, editMode: mode === "edit" }));
     setContextMenu(null);
   };
 
@@ -37,7 +39,7 @@ function RouteNode({ id, data }) {
     // if(!activeRoute) return null
     const { type } = rflow.getNode(id) as Node;
 
-    dispatch(setSelectedNode({ id, data, type, editMode: mode === "edit" }));
+    dispatch(setSelectedNode({ id, type, editMode: mode === "edit" }));
     setContextMenu(null);
   };
 
@@ -81,7 +83,7 @@ function RouteNode({ id, data }) {
         type="target"
         className="absolute h-5 top-0 -translate-y-[17px] w-[1px] -translate-x-1/2 after:absolute after:w-3 after:h-3 after:-top-1 after:bg-black after:rounded-full after:translate-x-[-4.5px]"
       />
-      <div className="flex bg-white border-2 border-black shadow-[6px_6px_0_1px_rgba(0,0,0,0.7)]">
+      <div className="flex relative bg-white border-2 border-black shadow-[6px_6px_0_1px_rgba(0,0,0,0.7)]">
         {!data.routeData ? (
           <div className="w-full h-full hover:bg-[#cadee7]">
             <div className="w-32 pb-2 px-1">
@@ -105,6 +107,14 @@ function RouteNode({ id, data }) {
           </div>
         ) : (
           <div></div>
+        )}
+        {isItTravelSpot && (
+          <span
+            className="absolute -translate-y-1/2 -translate-x-1/2"
+            title="Travel Spot"
+          >
+            <CheckCircle className="text-white fill-blue-500 w-8 h-8" />
+          </span>
         )}
       </div>
       {!activeRoute && (
