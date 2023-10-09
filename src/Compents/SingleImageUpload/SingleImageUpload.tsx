@@ -4,7 +4,15 @@ import axios from "axios";
 import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/lib/interface";
 import React, { useEffect, useState } from "react";
 
-const SingleImageUpload = ({ onValueChange, initValue = "" }) => {
+interface SingleImageUploadPropType {
+  onValueChange: React.Dispatch<React.SetStateAction<any>>;
+  initValue?: string;
+}
+
+const SingleImageUpload = ({
+  onValueChange,
+  initValue = "",
+}: SingleImageUploadPropType) => {
   const [image, setImage] = useState("");
 
   useEffect(() => {

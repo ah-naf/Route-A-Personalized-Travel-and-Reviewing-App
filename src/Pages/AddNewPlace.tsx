@@ -105,7 +105,7 @@ function AddNewPlace() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full border border-gray-300 focus:border-gray-500 rounded shadow p-2"
-            placeholder="Enter Place Name"
+            placeholder="Enter Title"
           />
         </div>
         <div className="grid">
@@ -190,7 +190,7 @@ function AddNewPlace() {
             className="p-2 px-5 rounded text-white font-medium bg-orange-500 tracking-wide text-lg mt-8"
             onClick={handleAdd}
           >
-            {searchParams.get("routeid") ? "Update" : "Add"} Place
+            {searchParams.get("routeid") ? "Update" : "Add"} Review
           </button>
         </div>
       </div>

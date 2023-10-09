@@ -4,7 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { useReactFlow } from "reactflow";
 import { setSelectedNode } from "../../../slices/CustomNodeSlice";
 import { RootState } from "../../../store";
-import { vehicles } from "../../../util";
+import { VehicleNodeData, vehicles } from "../../../util";
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 
@@ -44,12 +44,13 @@ function UpdateVehicleNode() {
 
   useEffect(() => {
     if (selectedNode && selectedNode.data) {
+      const dd = selectedNode.data as VehicleNodeData;
       setNodeDetails((prev) => ({
         ...prev,
-        vehicle_type: selectedNode.data.label,
-        cost: selectedNode.data.cost,
-        time_taken: selectedNode.data.time,
-        time_unit: selectedNode.data.time_unit || "minutes",
+        vehicle_type: dd.label,
+        cost: dd.cost,
+        time_taken: dd.time,
+        time_unit: dd.time_unit || "minutes",
       }));
       setVehicleIcon(selectedNode.data.image);
     }

@@ -1,12 +1,19 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
+interface SingleDropDownPropType {
+  columnNames: string[];
+  initValue?: string;
+  disabled?: boolean;
+  onValueChange: React.Dispatch<React.SetStateAction<any>>;
+}
 
 function SingleDropDown({
   columnNames,
-  onValueChange = undefined,
-  initValue,
+  onValueChange,
+  initValue = "",
   disabled = false,
-}) {
+}: SingleDropDownPropType) {
   const [value, setValue] = useState("");
 
   useEffect(() => {

@@ -12,7 +12,12 @@ interface MousePos {
   mouseY: number;
 }
 
-function RouteNode({ id, data }) {
+interface RouteNodePropsType {
+  id: string
+  data: any
+}
+
+function RouteNode({ id, data }: RouteNodePropsType) {
   const activeRoute = useSelector(
     (state: RootState) => state.route.activeRoute
   );

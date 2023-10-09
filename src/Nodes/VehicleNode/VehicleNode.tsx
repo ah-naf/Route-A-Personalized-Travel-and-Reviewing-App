@@ -2,7 +2,12 @@ import { useDispatch } from "react-redux";
 import { Handle, Node, Position, useReactFlow } from "reactflow";
 import { setSelectedNode } from "../../slices/CustomNodeSlice";
 
-function VehicleNode({ id, data }) {
+interface VehicleNodePropsType {
+  id: string;
+  data: any;
+}
+
+function VehicleNode({ id, data }: VehicleNodePropsType) {
   const rflow = useReactFlow();
   const dispatch = useDispatch();
 

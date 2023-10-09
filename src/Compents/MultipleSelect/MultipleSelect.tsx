@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 
+interface MultipleSelectPropType {
+  defaultValue: string[];
+  onValueChange: React.Dispatch<React.SetStateAction<any>>;
+  background?: string;
+}
+
 const MultipleSelect = ({
   onValueChange,
   defaultValue,
   background = "black",
-}) => {
+}: MultipleSelectPropType) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 

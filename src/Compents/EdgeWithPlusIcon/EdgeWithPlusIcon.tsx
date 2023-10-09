@@ -40,7 +40,7 @@ const EdgeWithPlusIcon = ({
     }
   }, [edge, id, nn]);
 
-  const onEdgeClick = (e, id) => {
+  const onEdgeClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: string) => {
     e.stopPropagation();
     // const edges = rr.getEdges().map((val) => {
     //   if (val.id === id) {

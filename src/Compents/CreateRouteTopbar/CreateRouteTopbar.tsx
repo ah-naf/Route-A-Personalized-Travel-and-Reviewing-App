@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useEdges, useNodes, useReactFlow } from "reactflow";
+import { ReactFlowInstance, useEdges, useNodes, useReactFlow } from "reactflow";
 import { setLastUpdatedTime } from "../../slices/CustomNodeSlice";
 import { postRouteThunk } from "../../slices/RouteSlice";
 import { RootState } from "../../store";
 import { FlowType, RoutePostType, calculateDate } from "../../util";
+
+interface CreateRouteTopbarPropType {
+  type?: string;
+  paramId ?: string;
+  tit?: string | undefined;
+  mod?: string | undefined;
+  updateAt ?: string | undefined;
+  reactFlowInstance: ReactFlowInstance;
+}
 
 function CreateRouteTopbar({
   reactFlowInstance,
@@ -14,7 +23,7 @@ function CreateRouteTopbar({
   tit = undefined,
   mod = undefined,
   updateAt = undefined,
-}) {
+}: CreateRouteTopbarPropType) {
   const user = useSelector((state: RootState) => state.auth.user);
   const [title, setTitle] = useState("untitled");
 
@@ -34,7 +43,7 @@ function CreateRouteTopbar({
   useEffect(() => {
     if (updateAt) {
       dispatch(setLastUpdatedTime(updateAt));
-      setTitle(tit);
+      setTitle(tit || "");
     }
   }, [updateAt, tit]);
 

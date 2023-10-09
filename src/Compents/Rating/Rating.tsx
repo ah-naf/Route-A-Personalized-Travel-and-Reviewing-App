@@ -2,12 +2,19 @@ import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import { Rate } from "antd";
 import React from "react";
 
+interface RatingPropType {
+  size?: string;
+  disabled?: boolean;
+  value?: number;
+  onValueChange?: React.Dispatch<React.SetStateAction<any>>;
+}
+
 const Rating = ({
   onValueChange,
   size = "3xl",
   disabled = false,
   value = 3,
-}) => {
+}: RatingPropType) => {
   const customIcons: Record<number, React.ReactNode> = {
     1: <FrownOutlined className={`text-${size}`} />,
     2: <FrownOutlined className={`text-${size}`} />,
@@ -24,7 +31,11 @@ const Rating = ({
         allowClear
         allowHalf
         disabled={disabled}
-        onChange={(e) => onValueChange(e)}
+        onChange={(e) => {
+          if (onValueChange) {
+            onValueChange(e);
+          }
+        }}
         character={({ index }) => {
           return customIcons[(index as number) + 1];
         }}

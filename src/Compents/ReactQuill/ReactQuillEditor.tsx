@@ -3,13 +3,21 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import "react-quill/dist/quill.snow.css";
 
+interface ReactQuillEditorPropType {
+  theme?: string;
+  onValueChange: React.Dispatch<React.SetStateAction<any>>;
+  placeholder?: string;
+  defaultValue: string;
+  height?: string;
+}
+
 function ReactQuillEditor({
   placeholder = "",
   onValueChange,
   defaultValue,
   theme = "snow",
   height = "100px",
-}) {
+}: ReactQuillEditorPropType) {
   const [value, setValue] = useState("");
   const quillRef = useRef<ReactQuill | null>(null);
 

@@ -46,7 +46,7 @@ function UserNavbarMenu() {
         </DropdownMenuItem>
         <DropdownMenuItem>
           <PlusSquare className="mr-2 h-4 w-4" />
-          <Link to="/place/new">Add place</Link>
+          <Link to="/place/new">Add review</Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />

@@ -69,7 +69,6 @@ function ViewRouteNode() {
           {data.desc ? (
             <>
               <p dangerouslySetInnerHTML={{ __html: data.desc }} />
-              <p dangerouslySetInnerHTML={{ __html: data.desc }} />
             </>
           ) : (
             <h1 className="text-center text-2xl font-medium mt-12">
@@ -81,7 +80,7 @@ function ViewRouteNode() {
               items={[
                 {
                   key: "1",
-                  label: `Contents (${imageList.length})`,
+                  label: `Contents (${imageList ? imageList.length : 0})`,
                   children: <ShowContnet imageList={imageList} />,
                 },
               ]}
@@ -114,9 +113,12 @@ function ViewRouteNode() {
 
 export default ViewRouteNode;
 
-const ShowContnet = ({ imageList }) => {
+const ShowContnet = ({ imageList }: {imageList: UploadFile[]}) => {
   const [index, setIndex] = useState(0);
-  if(imageList.length === 0) return <h1 className="text-lg !font-medium">No content uploaded by the user</h1>
+  if (!imageList || imageList.length === 0)
+    return (
+      <h1 className="text-lg !font-medium">No content uploaded by the user</h1>
+    );
   return (
     <div className="w-full">
       {imageList[index].type === "video/mp4" ? (
@@ -143,9 +145,7 @@ const ShowContnet = ({ imageList }) => {
         </button>
         <button
           onClick={() => {
-            setIndex(
-              (index - 1 + imageList.length) % imageList.length
-            );
+            setIndex((index - 1 + imageList.length) % imageList.length);
           }}
         >
           <BiRightArrowAlt

@@ -2,7 +2,10 @@ import { Collapse } from "@nextui-org/react";
 import { VehicleType, vehicles } from "../../util";
 
 function SideToolBox() {
-  const onDragStart = (event, nodeType) => {
+  const onDragStart = (
+    event: React.DragEvent<HTMLButtonElement>,
+    nodeType: { name: string; image: string; type: string }
+  ) => {
     let tempNodeType = {};
     // if (nodeType.type === "vehicleNode") {
     tempNodeType = {
@@ -49,7 +52,11 @@ function SideToolBox() {
                   }
                   draggable
                 >
-                  <img src={val.image} alt="" className="max-w-[60px] object-center" />
+                  <img
+                    src={val.image}
+                    alt=""
+                    className="max-w-[60px] object-center"
+                  />
                   <p className="font-secondary tracking-wider text-gray-500 font-medium text-sm text-center">
                     {val.name}
                   </p>

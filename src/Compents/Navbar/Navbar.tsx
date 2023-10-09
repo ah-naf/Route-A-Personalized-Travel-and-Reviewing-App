@@ -29,7 +29,7 @@ function Navbar() {
       </Link>
       <div className="flex items-center gap-4 text-sm">
         <button className="hover:underline">
-          <Link to={"/discover"}>Discover</Link>
+          <Link to={"/discover"}>Reviews</Link>
         </button>
         <button className="hover:underline">
           <Link to={"/search"}>Explore</Link>

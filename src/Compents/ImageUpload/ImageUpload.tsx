@@ -15,7 +15,12 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const ImageUpload = ({ setImages, defaultValue }) => {
+interface ImageUploadPropType {
+  defaultValue: UploadFile[];
+  setImages: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const ImageUpload = ({ setImages, defaultValue }: ImageUploadPropType) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
