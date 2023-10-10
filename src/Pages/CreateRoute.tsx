@@ -6,9 +6,9 @@ import ReactFlow, {
   BackgroundVariant,
   Connection,
   ConnectionMode,
-  Controls,
   Edge,
   Node,
+  Panel,
   ReactFlowProvider,
   addEdge,
   useEdgesState,
@@ -27,6 +27,7 @@ import VehicleNode from "../Nodes/VehicleNode/VehicleNode";
 import { verifyUserThunk } from "../slices/AuthSlice";
 import { RootState } from "../store";
 import { calculateDate } from "../util";
+import Controls from '../Compents/Controls/Controls'
 
 const initialNodes = [
   {
@@ -177,13 +178,16 @@ const MyFlow = () => {
           tit={title}
           updateAt={updatedAt}
         />
+        <Panel position="bottom-left">
+          <Controls />
+        </Panel>
         <Background
           color="grey"
           variant={"dots" as BackgroundVariant}
           gap={15}
           className="bg-slate-100"
         />
-        <Controls />
+        {/* <Controls /> */}
         {/* Change Condition */}
         {Object.keys(selectedNode).length > 0 && <UpdateNode />}
       </ReactFlow>

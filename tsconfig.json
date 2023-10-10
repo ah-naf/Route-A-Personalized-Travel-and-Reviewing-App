@@ -22,7 +22,7 @@
     "types": ["vite"]
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  // "references": [{ "path": "./tsconfig.json" }],
   "baseUrl": ".",
   "paths": {
     "@/*": ["./src/*"]

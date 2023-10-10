@@ -3,7 +3,7 @@ import {
   Background,
   BackgroundVariant,
   ConnectionMode,
-  Controls,
+  Panel,
   ReactFlow,
   ReactFlowProvider,
   useEdgesState,
@@ -13,6 +13,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import Controls from "../Compents/Controls/Controls";
 import CreateRouteLeftbar from "../Compents/CreateRouteLeftBar/CreateRouteLeftbar";
 import CreateRouteTopbar from "../Compents/CreateRouteTopbar/CreateRouteTopbar";
 import Suggestions from "../Compents/Suggestions/Suggestions";
@@ -96,7 +97,9 @@ const MyFlow = () => {
           gap={15}
           className="bg-slate-100"
         />
-        <Controls />
+        <Panel position="bottom-left">
+          <Controls />
+        </Panel>
         <UserReview />
         <Suggestions />
         {Object.keys(selectedNode).length > 0 && <ViewRouteNode />}

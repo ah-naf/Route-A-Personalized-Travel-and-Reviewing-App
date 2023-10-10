@@ -60,7 +60,7 @@ function SearchPage() {
     <>
       <Toaster />
       <Navbar />
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto min-h-screen">
         <SearchPageTop />
         <div className="mb-8 px-8">
           <p className="font-secondary text-3xl font-medium tracking-wide mb-4">

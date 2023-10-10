@@ -9,10 +9,10 @@ import { FlowType, RoutePostType, calculateDate } from "../../util";
 
 interface CreateRouteTopbarPropType {
   type?: string;
-  paramId ?: string;
+  paramId?: string;
   tit?: string | undefined;
   mod?: string | undefined;
-  updateAt ?: string | undefined;
+  updateAt?: string | undefined;
   reactFlowInstance: ReactFlowInstance;
 }
 
@@ -93,9 +93,12 @@ function CreateRouteTopbar({
           cost = handleRouteOption("cost", true) as number;
           time = handleRouteOption("time", true) as number;
           toSave = { ...toSave, cost, time };
+          window.location.href = "/";
+          // console.log({cost, time})
         }
 
         dispatch(postRouteThunk({ ...toSave }) as any);
+        
         // TODO: Delete it after connecting to db
         // localStorage.setItem("current_flow", JSON.stringify({ ...flow }));
       }
@@ -163,6 +166,8 @@ function CreateRouteTopbar({
       if (evt !== "default") dfs(start, evt);
       if (published) return maxVal;
       const edgeSet = new Set(edgePathMap);
+
+      // console.log({node, edge, start, maxVal})
 
       const temp = rflow.getEdges().map((e) => {
         if (edgeSet.has(e.id)) {
