@@ -30,7 +30,7 @@ To run this project locally, follow these steps:
 2. **Navigate to the Project Directory**:
 
    ```bash
-   cd ROUTE
+   cd Route-Frontend
    ```
 
 3. **Install Dependencies**:
