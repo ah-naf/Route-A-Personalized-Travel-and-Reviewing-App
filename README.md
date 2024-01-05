@@ -1,3 +1,7 @@
+Sure, I can incorporate the information about the `.env` file into the `README.md` file for your project. Here's the updated content:
+
+---
+
 # ROUTE: A Personalized Travelling and Reviewing App
 
 The app allows users to create routes with detailed information on how to travel between places, including mode of transport, time required, and estimated costs. Users can also add reviews for places, complete with multimedia content.
@@ -44,9 +48,28 @@ cd server
 # Install dependencies
 npm install
 
+# Create an .env file and configure your environment variables (see below for details)
+
 # Start the server using nodemon
 npx nodemon src/index.ts
 ```
+
+#### Configuring the Server Environment
+
+In the server folder, you need to create a `.env` file containing necessary environment variables. This file should include:
+
+```plaintext
+# Environment variables for Prisma and other services
+
+DATABASE_URL= Provie postgres db url
+JWT_SECRET= provide jwt secret
+
+CLOUDINARY_CLOUD_NAME=Your cloudinary clound name
+CLOUDINARY_API_KEY=Your cloudinary api key
+CLOUDINARY_API_SECRET=Your cloudinary api secret
+```
+
+This configuration includes your database connection string, JWT secret, and Cloudinary credentials. Ensure you replace these values with your actual configuration details.
 
 ### Using Docker
 
@@ -57,6 +80,5 @@ Alternatively, you can use Docker to run the entire application:
 docker compose up
 
 # Execute migration in the server container
-# Replace [server-container-name] with the actual container name
 docker exec -it route-server npx prisma migrate dev
 ```
