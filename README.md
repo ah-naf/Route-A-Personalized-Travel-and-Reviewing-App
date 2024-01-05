@@ -23,7 +23,7 @@ A step-by-step series of examples that tell you how to get a development environ
 
 ```bash
 # Clone the repository
-git clone [repository-url]
+git clone https://github.com/ah-naf/Route-A-Personalized-Travel-and-Reviewing-App.git
 
 # Navigate to the client directory
 cd client
