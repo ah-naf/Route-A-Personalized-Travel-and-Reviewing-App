@@ -1,7 +1,3 @@
-Sure, I can incorporate the information about the `.env` file into the `README.md` file for your project. Here's the updated content:
-
----
-
 # ROUTE: A Personalized Travelling and Reviewing App
 
 The app allows users to create routes with detailed information on how to travel between places, including mode of transport, time required, and estimated costs. Users can also add reviews for places, complete with multimedia content.
