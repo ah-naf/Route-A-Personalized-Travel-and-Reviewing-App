@@ -21,35 +21,22 @@ This repository hosts the code for ROUTE, a personalized traveling and reviewing
 
 To run this project locally, follow these steps:
 
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/ah-naf/Route-Frontend.git
-   ```
-
-2. **Navigate to the Project Directory**:
+1. **Navigate to the Project Directory**:
 
    ```bash
    cd Route-Frontend
    ```
 
-3. **Install Dependencies**:
+2. **Install Dependencies**:
 
    ```bash
    npm install
    ```
 
-4. **Start the Development Server**:
+3. **Start the Development Server**:
 
    ```bash
    npm run dev
    ```
 
    This will start the development server and open the application in your default web browser.
-
-
-
-## Backend
-
-You can find the backend of this project [here](https://github.com/ah-naf/Route-backend).
-
