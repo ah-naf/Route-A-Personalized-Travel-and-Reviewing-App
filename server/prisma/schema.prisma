@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String
+  username  String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  avatar    Json
+  bio       String?
+  url       String?
+  phone     String?
+  routes    Route[]
+  comments  Comment[]
+  likes     RouteLike[]
+  bookmarks Bookmark[]
+  review Review[]
+}
+
+model Route {
+  id          String     @id @default(uuid())
+  title       String
+  flow        Json
+  published   Boolean
+  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime   @default(now())
+  time Int?
+  cost Int?
+
+  comments    Comment[]
+  likes       RouteLike[]
+  bookmarks   Bookmark[]
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  text      String
+  createdAt DateTime  @default(now())
+  userId    String
+  routeId   String
+  route     Route     @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model RouteLike {
+  id        String    @id @default(uuid())
+  userId    String
+  routeId   String
+  createdAt DateTime  @default(now())
+  route     Route     @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Bookmark {
+  id String @id @default(uuid())
+  userId String
+  routeId String
+  createdAt DateTime @default(now())
+  route Route @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id String @id @default(uuid())
+  title String @default("")
+  userId String
+  createdAt DateTime @default(now())
+  place String
+  cover_pic String?
+  desc String
+  updatedAt   DateTime   @updatedAt @default(now())
+  rating Float
+  contents Json[]
+  tags String[]
+  user User @relation(fields: [userId], references: [id])
+}

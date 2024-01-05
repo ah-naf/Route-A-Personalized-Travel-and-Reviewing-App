@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  client:
+    build: ./client
+    container_name: route-client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:16.1-alpine3.19
+    restart: always
+    container_name: route-db
+    user: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: 8880
+      PGUSER: postgres
+      POSTGRES_DB: route
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    container_name: route-server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: postgres://postgres:8880@db:5432/route?schema=public
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  postgres-data:
