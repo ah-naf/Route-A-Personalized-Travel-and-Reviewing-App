@@ -24,7 +24,7 @@ To run this project locally, follow these steps:
 1. **Navigate to the Project Directory**:
 
    ```bash
-   cd Route-Frontend
+   cd client # if you are not in client directory
    ```
 
 2. **Install Dependencies**:
